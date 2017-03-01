@@ -1,0 +1,28 @@
+{
+  "name": "piikki-client-tg",
+  "version": "0.0.1",
+  "description": "Telegram client for piikki",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/majori/piikki-client-tg.git"
+  },
+  "keywords": [
+    "Telegram"
+  ],
+  "author": "Antti Kivimäki",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/majori/piikki-client-tg/issues"
+  },
+  "homepage": "https://github.com/majori/piikki-client-tg#readme",
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "node-telegram-bot-api": "^0.26.0",
+    "superagent": "^3.3.2",
+    "superagent-prefix": "0.0.2"
+  }
+}
