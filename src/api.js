@@ -4,15 +4,38 @@ const _ = require('lodash');
 
 const cfg = require('../config');
 
+const makeRequest = (method, url, payload) => new Promise((resolve, reject) => {
+  const req = request(method, `${cfg.apiUrl}/global/${url}`);
+
+  req.set('Authorization', cfg.apiToken);
+
+  if (_.includes(['POST', 'PUT', 'DELETE'], method) && payload) {
+    req.send(payload);
+  }
+
+  req.end((err, res) => {
+    if (err || !res.body.ok) {
+      reject(err);
+    } else {
+      resolve(res.body.result);
+    }
+  });
+});
+
+const get = url => makeRequest('GET', url);
+const post = (url, payload) => makeRequest('POST', url, payload);
+const put = (url, payload) => makeRequest('PUT', url, payload);
+const del = (url, payload) => makeRequest('DELETE', url, payload);
+
 module.exports = {
   getUsers: () =>
     get('/users'),
 
-  getUser: (username) =>
+  getUser: username =>
     get(`/users/${username}`),
 
-  deleteUser: (username) =>
-    del(`/users`, { username }),
+  deleteUser: username =>
+    del('/users', { username }),
 
   createUser: (username, password) =>
     post('/users/create', { username, password }),
@@ -29,13 +52,13 @@ module.exports = {
   getGroups: () =>
     get('/groups'),
 
-  getGroupMembers: (groupName) =>
+  getGroupMembers: groupName =>
     get(`/groups/${groupName}/members`),
 
   getGroupMember: (groupName, username) =>
     get(`/groups/${groupName}/members/${username}`),
 
-  createGroup: (groupName) =>
+  createGroup: groupName =>
     post('/groups/create', { groupName }),
 
   addMemberToGroup: (groupName, username) =>
@@ -48,23 +71,3 @@ module.exports = {
     del('/transaction', { groupName, username, amount }),
 };
 
-const get = (url) => makeRequest('GET', url);
-const post = (url, payload) => makeRequest('POST', url, payload);
-const put = (url, payload) => makeRequest('PUT', url, payload);
-const del = (url, payload) => makeRequest('DELETE', url, payload);
-
-const makeRequest = (method, url, payload) => new Promise((resolve, reject) => {
-    const req = request(method, `${cfg.apiUrl}/global/${url}`);
-
-    req.set('Authorization', cfg.apiToken);
-
-    if (_.includes(['POST', 'PUT', 'DELETE'], method) && payload) {
-        req.send(payload);
-    }
-
-    req.end((err, res) => {
-        (err || !res.body.ok)
-            ? reject(err)
-            : resolve(res.body.result);
-    });
-});
