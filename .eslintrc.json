@@ -1,0 +1,8 @@
+{
+    "extends": "airbnb",
+    "rules": {
+        "no-param-reassign": 2,
+        "linebreak-style": ["error", "windows"],
+        "no-confusing-arrow": ["error", {"allowParens": true}]
+    }
+}
