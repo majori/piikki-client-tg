@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrate:latest": "knex migrate:latest",
+    "migrate:rollback": "knex migrate:rollback"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,17 @@
   "homepage": "https://github.com/majori/piikki-client-tg#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
+    "knex": "^0.12.9",
+    "lodash": "^4.17.4",
+    "mssql": "^3.3.0",
     "node-telegram-bot-api": "^0.26.0",
     "superagent": "^3.5.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.9.0"
   }
 }
