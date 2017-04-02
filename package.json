@@ -29,8 +29,8 @@
     "knex": "^0.12.9",
     "lodash": "^4.17.4",
     "mssql": "^3.3.0",
-    "node-telegram-bot-api": "^0.26.0",
-    "superagent": "^3.5.2"
+    "superagent": "^3.5.2",
+    "telegraf": "^3.6.7"
   },
   "devDependencies": {
     "eslint": "^3.18.0",

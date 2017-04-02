@@ -1,4 +1,18 @@
-const bot = require('./bot');
+const Telegraf = require('telegraf');
+const cfg = require('../config');
 
-// Start the bot
-bot();
+const commander = require('./commander');
+
+const bot = new Telegraf(cfg.tgToken);
+
+bot.use(commander.middleware.getSession);
+
+bot.command('kirjaudu', commander.login);
+bot.on('message', commander.message);
+
+if (cfg.isProduction) {
+  bot.telegram.setWebhook(`${cfg.appUrl}/bot${cfg.tgToken}`);
+} else {
+  bot.startPolling();
+}
+
