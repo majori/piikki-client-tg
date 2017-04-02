@@ -8,6 +8,7 @@ const bot = new Telegraf(cfg.tgToken);
 bot.use(commander.middleware.getSession);
 
 bot.command('kirjaudu', commander.login);
+bot.command('saldo', commander.middleware.loggedIn, commander.saldo);
 bot.on('message', commander.message);
 
 if (cfg.isProduction) {

@@ -15,6 +15,18 @@ module.exports = {
     }
   },
 
+  saldo: (ctx) => {
+    api.getUser(ctx.session.username)
+    .then((user) => {
+      if (_.isEmpty(user.saldos)) {
+        ctx.reply('Et ole liittynyt vielä mihinkään ryhmään.');
+        return;
+      }
+
+      const saldos = _.map(user.saldos, (saldo, group) => `${group}: ${saldo}`);
+      ctx.reply(`Saldosi:\n${_.join(saldos, '\n')}`);
+    });
+  },
 
   // Message without any command
   message: (ctx) => {
