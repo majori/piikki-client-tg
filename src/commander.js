@@ -2,53 +2,21 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 const db = require('./database');
 const api = require('./api');
-
-const sessionCommands = {
-  LOGIN_USERNAME: (ctx) => {
-    const state = ctx.session.state;
-    if (ctx.message.text.length < 20) {
-      db.setUserState(ctx.message.from.id, {
-        type: 'LOGIN_PASSWORD',
-        payload: {
-          username: ctx.message.text,
-        },
-      })
-      .then(() => ctx.reply('Syötä salasana'));
-    }
-  },
-
-  LOGIN_PASSWORD: (ctx) => {
-    const username = ctx.session.state.payload.username;
-    const password = ctx.message.text;
-
-    api.authenticateUser(username, password)
-    .then((res) => {
-      if (res.authenticated) {
-        db.linkUser(ctx.message.from.id, username)
-        .then(() => {
-          ctx.reply('Kirjauduit onnistuneesti!');
-        });
-      } else {
-        ctx.reply('Väärä tunnus tai salasana, yritä uudelleen');
-      }
-    })
-    .catch(() => ctx.reply('Tapahtui virhe, yritä kirjautumista uudelleen'))
-    .finally(() => db.setUserState(ctx.message.from.id, null));
-  },
-};
+const responders = require('./responders');
 
 module.exports = {
   login: (ctx) => {
     if (ctx.session.username) {
       ctx.reply(`Olet jo kirjautunut tunnuksella ${ctx.session.username}`);
     } else {
-      db.setUserState(ctx.message.from.id, {
-        type: 'LOGIN_USERNAME',
-      })
+      // Start the login process
+      db.setUserState(ctx.message.from.id, responders.states.loginUsername)
       .then(() => ctx.reply('Syötä tunnus'));
     }
   },
 
+
+  // Message without any command
   message: (ctx) => {
     // If message is empty or command, ignore it
     if (_.isEmpty(ctx.message.text) || (ctx.message.text[0] === '/')) return;
@@ -56,7 +24,7 @@ module.exports = {
     // There is no messages to react
     if (!ctx.session.state) return;
 
-    sessionCommands[ctx.session.state.type](ctx);
+    responders.responders[ctx.session.state.type](ctx);
   },
 
   middleware: {
@@ -70,10 +38,19 @@ module.exports = {
       .then((user) => {
         ctx.session = {
           username: user.piikki_username,
+          defaultGroup: user.default_group,
           state: JSON.parse(user.json_state),
         };
       })
       .finally(() => next());
+    },
+
+    loggedIn: (ctx, next) => {
+      if (_.has(ctx, ['session', 'username']) && !_.isNull(ctx.session.username)) {
+        next();
+      } else {
+        ctx.reply('Et ole kirjautunut vielä sisään, voit kirjautua komennolla /kirjaudu');
+      }
     },
   },
 };

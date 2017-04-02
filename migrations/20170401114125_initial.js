@@ -5,6 +5,7 @@ exports.up = (knex, Promise) => Promise.all([
       .primary();
     table.string('piikki_username')
       .unique();
+    table.string('default_group');
     table.text('json_state');
   }),
 ]);
