@@ -4,22 +4,11 @@ cfg.env = process.env.NODE_ENV || 'development';
 cfg.isProduction = (cfg.env === 'production');
 
 cfg.appUrl = process.env.PIIKKIBOT_APP_URL;
+cfg.appPort = process.env.port;
 cfg.apiUrl = process.env.PIIKKIBOT_BACKEND_URL;
 cfg.apiToken = process.env.PIIKKIBOT_BACKEND_TOKEN;
 
 cfg.tgToken = process.env.PIIKKIBOT_TELEGRAM_TOKEN;
-
-cfg.tgBotOptions = (cfg.isProduction) ?
-// Production options
-{
-  webHook: {
-    port: process.env.port,
-  },
-} :
-// Development options
-{
-  polling: true,
-};
 
 cfg.db = {
   client: 'mssql',

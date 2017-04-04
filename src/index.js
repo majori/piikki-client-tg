@@ -13,6 +13,7 @@ bot.on('message', commander.message);
 
 if (cfg.isProduction) {
   bot.telegram.setWebhook(`${cfg.appUrl}/bot${cfg.tgToken}`);
+  bot.startWebhook(`/bot${cfg.tgToken}`, null, cfg.appPort);
 } else {
   bot.startPolling();
 }
