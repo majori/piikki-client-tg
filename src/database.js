@@ -38,6 +38,6 @@ module.exports = {
   async setUserState(telegramId, state) {
     return db('user')
     .where({ telegram_id: telegramId })
-    .update({ json_state: (state ? JSON.stringify(state) : JSON.stringify({})) });
+    .update({ json_state: (state ? JSON.stringify(state) : null) });
   },
 };
