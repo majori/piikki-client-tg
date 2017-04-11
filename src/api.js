@@ -1,10 +1,9 @@
 const request = require('superagent');
-const Promise = require('bluebird');
 const _ = require('lodash');
 
 const cfg = require('../config');
 
-const makeRequest = (method, url, payload) => new Promise((resolve, reject) => {
+async function makeRequest(method, url, payload) {
   const req = request(method, `${cfg.apiUrl}/global/${url}`);
 
   req.set('Authorization', cfg.apiToken);
@@ -13,61 +12,73 @@ const makeRequest = (method, url, payload) => new Promise((resolve, reject) => {
     req.send(payload);
   }
 
-  req.end((err, res) => {
-    if (err || !res.body.ok) {
-      reject(err);
-    } else {
-      resolve(res.body.result);
-    }
-  });
-});
+  try {
+    const res = await req;
+    return res.body.result;
+  } catch (err) {
+    throw err;
+  }
+}
 
-const get = url => makeRequest('GET', url);
-const post = (url, payload) => makeRequest('POST', url, payload);
-const put = (url, payload) => makeRequest('PUT', url, payload);
-const del = (url, payload) => makeRequest('DELETE', url, payload);
+async function get(url) { return makeRequest('GET', url); }
+async function post(url, payload) { return makeRequest('POST', url, payload); }
+async function put(url, payload) { return makeRequest('PUT', url, payload); }
+async function del(url, payload) { return makeRequest('DELETE', url, payload); }
 
 module.exports = {
-  getUsers: () =>
-    get('/users'),
+  async getUsers() {
+    return get('/users');
+  },
 
-  getUser: username =>
-    get(`/users/${username}`),
+  async getUser(username) {
+    return get(`/users/${username}`);
+  },
 
-  deleteUser: username =>
-    del('/users', { username }),
+  async deleteUser(username) {
+    return del('/users', { username });
+  },
 
-  createUser: (username, password) =>
-    post('/users/create', { username, password }),
+  async createUser(username, password) {
+    return post('/users/create', { username, password });
+  },
 
-  authenticateUser: (username, password) =>
-    post('/users/authenticate', { username, password }),
+  async authenticateUser(username, password) {
+    return post('/users/authenticate', { username, password });
+  },
 
-  resetPassword: (username, oldPassword, newPassword) =>
-    put('/users/reset/password', { username, oldPassword, newPassword }),
+  async resetPassword(username, oldPassword, newPassword) {
+    return put('/users/reset/password', { username, oldPassword, newPassword });
+  },
 
-  resetUsername: (oldUsername, newUsername, password) =>
-    put('/users/reset/username', { oldUsername, newUsername, password }),
+  async resetUsername(oldUsername, newUsername, password) {
+    return put('/users/reset/username', { oldUsername, newUsername, password });
+  },
 
-  getGroups: () =>
-    get('/groups'),
+  async getGroups() {
+    return get('/groups');
+  },
 
-  getGroupMembers: groupName =>
-    get(`/groups/${groupName}/members`),
+  async getGroupMembers(groupName) {
+    return get(`/groups/${groupName}/members`);
+  },
 
-  getGroupMember: (groupName, username) =>
-    get(`/groups/${groupName}/members/${username}`),
+  async getGroupMember(groupName, username) {
+    return get(`/groups/${groupName}/members/${username}`);
+  },
 
-  createGroup: groupName =>
-    post('/groups/create', { groupName }),
+  async createGroup(groupName) {
+    return post('/groups/create', { groupName });
+  },
 
-  addMemberToGroup: (groupName, username) =>
-    post(`/groups/${groupName}/addMember`, { username }),
+  async addMemberToGroup(groupName, username) {
+    return post(`/groups/${groupName}/addMember`, { username });
+  },
 
-  removeMemberFromGroup: (groupName, username) =>
-    del(`/groups/${groupName}/removeMember`, { username }),
+  async removeMemberFromGroup(groupName, username) {
+    return del(`/groups/${groupName}/removeMember`, { username });
+  },
 
-  makeTransaction: (groupName, username, amount) =>
-    del('/transaction', { groupName, username, amount }),
+  async makeTransaction(groupName, username, amount) {
+    return del('/transaction', { groupName, username, amount });
+  },
 };
-

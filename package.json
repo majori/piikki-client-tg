@@ -4,10 +4,11 @@
   "description": "Telegram client for piikki",
   "main": "src/index.js",
   "engines": {
-    "node": "7.6.0"
+    "node": ">=7.6.0"
   },
   "scripts": {
     "start": "node src/index.js",
+    "dev": "nodemon --debug=5858 src/index.js",
     "migrate:latest": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback"
   },

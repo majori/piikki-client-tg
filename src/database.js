@@ -1,28 +1,43 @@
 const knex = require('knex');
-const Promise = require('bluebird');
 const cfg = require('../config');
 
 const db = knex(cfg.db);
 
 module.exports = {
-  createUser: (telegramId) => db('user')
-    .insert({ telegram_id: telegramId }),
+  async createUser(telegramId) {
+    return db('user')
+    .insert({ telegram_id: telegramId });
+  },
 
-  linkUser: (telegramId, username) => db('user')
+  async linkUser(telegramId, username) {
+    return db('user')
     .where({ telegram_id: telegramId })
-    .update({ piikki_username: username }),
+    .update({ piikki_username: username });
+  },
 
-  getUser: telegramId => db('user')
+  async unlinkUser(telegramId) {
+    return db('user')
+    .where({ telegram_id: telegramId })
+    .update({ piikki_username: null, json_state: null });
+  },
+
+  async getUser(telegramId) {
+    return db('user')
     .first()
-    .where({ telegram_id: telegramId }),
+    .where({ telegram_id: telegramId });
+  },
 
-  getUserState: telegramId => db('user')
-    .first('json_state')
-    .where({ telegram_id: telegramId })
-    .then(res => (res ? JSON.parse(res.json_state) : null)),
+  async getUserState(telegramId) {
+    const user = await db('user')
+      .first('json_state')
+      .where({ telegram_id: telegramId });
 
-  setUserState: (telegramId, state) => db('user')
+    return user ? JSON.parse(user.json_state) : null;
+  },
+
+  async setUserState(telegramId, state) {
+    return db('user')
     .where({ telegram_id: telegramId })
-    .update({ json_state: (state ? JSON.stringify(state) : null) })
-    .then(() => Promise.resolve()),
+    .update({ json_state: (state ? JSON.stringify(state) : JSON.stringify({})) });
+  },
 };
