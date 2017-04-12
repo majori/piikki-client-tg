@@ -1,29 +1,36 @@
-const TelegramBot = require('node-telegram-bot-api');
+const Telegraf = require('telegraf');
+const commandParts = require('telegraf-command-parts');
+const cfg = require('../config');
+const commander = require('./commander');
+const middleware = require('./middleware');
 
-// replace the value below with the Telegram token you receive from @BotFather
-const token = process.env.PIIKKIBOT_TELEGRAM_TOKEN;
+const bot = new Telegraf(cfg.tgToken);
 
-// Create a bot that uses 'polling' to fetch new updates
-var bot = new TelegramBot(token, { polling: true });
+// Apply middleware
+bot.use(commandParts());
+bot.use(middleware.getSession);
 
-// Matches "/echo [whatever]"
-bot.onText(/\/echo (.+)/, function (msg, match) {
-  // 'msg' is the received Message from Telegram
-  // 'match' is the result of executing the regexp above on the text content
-  // of the message
+bot.command('kirjaudu', commander.login);
 
-  var chatId = msg.chat.id;
-  var resp = match[1]; // the captured "whatever"
+bot.command('saldo', middleware.loggedIn, commander.saldo);
+bot.command('lisaa', middleware.loggedIn, commander.add);
+bot.command('viiva', middleware.loggedIn, commander.subtract);
 
-  // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, resp);
+bot.on('message', commander.message);
+
+// Get own username to handle commands such as /start@my_bot
+bot.telegram.getMe()
+.then((botInfo) => {
+  bot.options.username = botInfo.username;
 });
 
-// Listen for any kind of message. There are different kinds of
-// messages.
-bot.on('message', function (msg) {
-  var chatId = msg.chat.id;
+// Setup webhook when in production
+if (cfg.isProduction) {
+  bot.telegram.setWebhook(`${cfg.appUrl}/bot${cfg.tgToken}`);
+  bot.startWebhook(`/bot${cfg.tgToken}`, null, cfg.appPort);
 
-  // send a message to the chat acknowledging receipt of their message
-  bot.sendMessage(chatId, "Received your message");
-});
+// If env is development, get updates by polling
+} else {
+  bot.telegram.setWebhook(); // Unsubscribe webhook if it exists
+  bot.startPolling();
+}
