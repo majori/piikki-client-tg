@@ -31,7 +31,8 @@
     "lodash": "^4.17.4",
     "mssql": "^3.3.0",
     "superagent": "^3.5.2",
-    "telegraf": "^3.6.7"
+    "telegraf": "^3.6.7",
+    "telegraf-command-parts": "^1.0.3"
   },
   "devDependencies": {
     "eslint": "^3.18.0",

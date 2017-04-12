@@ -90,6 +90,6 @@ module.exports = {
   },
 
   async makeTransaction(groupName, username, amount) {
-    return del('/transaction', { groupName, username, amount });
+    return post('/transaction', { groupName, username, amount });
   },
 };

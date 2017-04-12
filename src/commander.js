@@ -26,6 +26,44 @@ module.exports = {
     ctx.reply(`Saldosi:\n${_.join(saldos, '\n')}`);
   },
 
+  async add(ctx) {
+    const amount = (_.isEmpty(ctx.state.command.args)) ? 1 :
+      _.chain(ctx.state.command.splitArgs)
+      .first()
+      .toLength()
+      .value();
+
+    if (amount > 0) {
+      if (ctx.session.defaultGroup) {
+        const res = await api.makeTransaction(ctx.session.defaultGroup, ctx.session.username, amount);
+        if (res) {
+          ctx.reply(`Saldosi ryhmässä ${ctx.session.defaultGroup}: ${_.first(res).saldo}`);
+        }
+      }
+    } else {
+      ctx.reply(`"${_.first(ctx.state.command.splitArgs)}" ei ollut positiivinen kokonaisluku`);
+    }
+  },
+
+  async subtract(ctx) {
+    const amount = (_.isEmpty(ctx.state.command.args)) ? 1 :
+      _.chain(ctx.state.command.splitArgs)
+      .first()
+      .toLength()
+      .value();
+
+    if (amount > 0) {
+      if (ctx.session.defaultGroup) {
+        const res = await api.makeTransaction(ctx.session.defaultGroup, ctx.session.username, -amount);
+        if (res) {
+          ctx.reply(`Saldosi ryhmässä ${ctx.session.defaultGroup}: ${_.first(res).saldo}`);
+        }
+      }
+    } else {
+      ctx.reply(`"${_.first(ctx.state.command.splitArgs)}" ei ollut positiivinen kokonaisluku`);
+    }
+  },
+
   // Message without any command
   message: (ctx) => {
     // If message is empty or command, ignore it
