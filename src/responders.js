@@ -1,6 +1,6 @@
+const _ = require('lodash');
 const db = require('./database');
 const api = require('./api');
-
 
 const states = {
   loginPassword: username => ({
@@ -38,6 +38,13 @@ const responders = {
     if (res.authenticated) {
       await db.linkUser(ctx.message.from.id, username);
       ctx.reply('Kirjauduit onnistuneesti!');
+
+      // Set default group if the user has only one
+      const user = await api.getUser(username);
+      if (_.size(user.saldos) === 1) {
+        const groupName = _.chain(user.saldos).keys().first().value();
+        await db.setDefaultGroup(ctx.message.from.id, groupName);
+      }
     } else {
       ctx.reply('Väärä tunnus tai salasana, yritä uudelleen');
     }
