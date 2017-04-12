@@ -20,10 +20,21 @@ async function makeRequest(method, url, payload) {
   }
 }
 
-async function get(url) { return makeRequest('GET', url); }
-async function post(url, payload) { return makeRequest('POST', url, payload); }
-async function put(url, payload) { return makeRequest('PUT', url, payload); }
-async function del(url, payload) { return makeRequest('DELETE', url, payload); }
+async function get(url) {
+  return makeRequest('GET', url);
+}
+
+async function post(url, payload) {
+  return makeRequest('POST', url, payload);
+}
+
+async function put(url, payload) {
+  return makeRequest('PUT', url, payload);
+}
+
+async function del(url, payload) {
+  return makeRequest('DELETE', url, payload);
+}
 
 module.exports = {
   async getUsers() {
