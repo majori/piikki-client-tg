@@ -10,6 +10,7 @@ const bot = new Telegraf(cfg.tgToken);
 bot.use(commandParts());
 bot.use(middleware.getSession);
 
+bot.command('start', commander.login);
 bot.command('kirjaudu', commander.login);
 
 bot.command('saldo', middleware.loggedIn, commander.saldo);
@@ -31,6 +32,6 @@ if (cfg.isProduction) {
 
 // If env is development, get updates by polling
 } else {
-  bot.telegram.setWebhook(); // Unsubscribe webhook if it exists
+  bot.telegram.deleteWebhook(); // Unsubscribe webhook if it exists
   bot.startPolling();
 }
