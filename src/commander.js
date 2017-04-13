@@ -13,7 +13,7 @@ module.exports = {
     } else {
       // Start the login process
       await db.setUserState(ctx.message.from.id, responders.states.loginUsername());
-      ctx.reply('Syötä tunnus');
+      ctx.reply('Syötä Piikki-tunnuksesi');
     }
   },
 
