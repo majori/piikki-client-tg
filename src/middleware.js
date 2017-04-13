@@ -9,6 +9,7 @@ module.exports = {
 
     let user = await db.getUser(ctx.message.from.id);
 
+    // If user doesn't exist, create new user
     if (!user) {
       await db.createUser(ctx.message.from.id);
       user = await db.getUser(ctx.message.from.id);
@@ -23,6 +24,7 @@ module.exports = {
     next();
   },
 
+  // Check if there is a link between telegram ID and piikki username
   loggedIn: (ctx, next) => {
     // Check if session exists
     if (_.has(ctx, ['session', 'username']) && !_.isNull(ctx.session.username)) {

@@ -40,4 +40,10 @@ module.exports = {
     .where({ telegram_id: telegramId })
     .update({ json_state: (state ? JSON.stringify(state) : null) });
   },
+
+  async setDefaultGroup(telegramId, groupName) {
+    return db('user')
+    .where({ telegram_id: telegramId })
+    .update({ default_group: groupName });
+  },
 };

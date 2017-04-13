@@ -16,6 +16,8 @@ const states = {
 };
 
 const responders = {
+
+  // Takes username and asks for password
   async loginUsername(ctx) {
     if (ctx.message.text.length < 20) {
       await db.setUserState(ctx.message.from.id, states.loginPassword(ctx.message.text));
@@ -23,6 +25,7 @@ const responders = {
     }
   },
 
+  // Takes password and tries to authenticate the user
   async loginPassword(ctx) {
     const username = ctx.session.state.payload.username;
     const password = ctx.message.text;
@@ -37,7 +40,7 @@ const responders = {
 
     if (res.authenticated) {
       await db.linkUser(ctx.message.from.id, username);
-      ctx.reply('Kirjauduit onnistuneesti!');
+      ctx.reply(`Kirjauduit onnistuneesti käyttäjällä ${username}!`);
 
       // Set default group if the user has only one
       const user = await api.getUser(username);
@@ -46,7 +49,7 @@ const responders = {
         await db.setDefaultGroup(ctx.message.from.id, groupName);
       }
     } else {
-      ctx.reply('Väärä tunnus tai salasana, yritä uudelleen');
+      ctx.reply('Väärä tunnus tai salasana, yritä /kirjaudu uudelleen.');
     }
 
     await db.setUserState(ctx.message.from.id, null);
