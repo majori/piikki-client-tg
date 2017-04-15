@@ -9,7 +9,7 @@ module.exports = {
 
   // Check if message is from private chat
   isPrivate: (ctx, next) => {
-    if (ctx.chat.type === 'group') {
+    if (ctx.chat.type !== 'private') {
       ctx.telegram.sendMessage(
         ctx.chat.id,
         `Tämä komento toimii vain <a href="t.me/${ctx.options.username}">private-chatissa</a>.`,
