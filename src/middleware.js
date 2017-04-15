@@ -28,8 +28,24 @@ module.exports = {
     // Check if session exists
     if (_.has(ctx, ['session', 'username']) && !_.isNull(ctx.session.username)) {
       next();
+      return;
+    }
+
+    // The message came from private chat
+    if (ctx.chat.type === 'private') {
+      ctx.reply('Et ole kirjautunut vielä sisään, kokeile /kirjaudu');
+
+    // The message came from channel, group or supergroup
     } else {
-      ctx.reply('Et ole kirjautunut vielä sisään, voit kirjautua komennolla /kirjaudu');
+      ctx.telegram.sendMessage(
+        ctx.chat.id,
+        'Et ole kirjautunut vielä sisään, lähetä ' +
+        `<a href="t.me/${ctx.options.username}">minulle</a> yksityisessä /kirjaudu`,
+        {
+          parse_mode: 'HTML',
+          disable_web_page_preview: true,
+        }
+      );
     }
   },
 };
