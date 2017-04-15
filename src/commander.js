@@ -1,25 +1,27 @@
 const _ = require('lodash');
-const db = require('./database');
 const api = require('./api');
+const session = require('./session');
 const responders = require('./responders');
 
 module.exports = {
 
   // ## /kirjaudu
   // Link telegram id with piikki username
-  async login(ctx) {
+  login: async (ctx) => {
+    // Check if there is already a link
     if (ctx.session.username) {
       ctx.reply(`Olet jo kirjautunut tunnuksella ${ctx.session.username}`);
-    } else {
-      // Start the login process
-      await db.setUserState(ctx.message.from.id, responders.states.loginUsername());
-      ctx.reply('Syötä Piikki-tunnuksesi');
+      return;
     }
+
+    // Start the login process
+    await session.updateSession(ctx.from.id, session.constants.states.loginAskUsername());
+    ctx.reply('Syötä Piikki-tunnuksesi');
   },
 
   // ## /saldo
   // Lists saldos in each group
-  async saldo(ctx) {
+  saldo: async (ctx) => {
     const user = await api.getUser(ctx.session.username);
 
     if (_.isEmpty(user.saldos)) {
@@ -27,13 +29,13 @@ module.exports = {
       return;
     }
 
-    const saldos = _.map(user.saldos, (saldo, group) => `${group}: ${saldo}`);
-    ctx.reply(`Saldosi:\n${_.join(saldos, '\n')}`);
+    const saldos = _.map(user.saldos, (saldo, group) => `*${group}*: ${saldo}`);
+    ctx.replyWithMarkdown(`Ryhmiesi saldot:\n${_.join(saldos, '\n')}`);
   },
 
   // ## /lisaa [amount]
   // Add credit by certain amount, default is 1
-  async add(ctx) {
+  add: async (ctx) => {
     const amount = (_.isEmpty(ctx.state.command.args)) ? 1 :
       _.chain(ctx.state.command.splitArgs)
       .first()
@@ -54,7 +56,7 @@ module.exports = {
 
   // ## /viiva [amount]
   // Takes credit by certain amount
-  async subtract(ctx) {
+  subtract: async (ctx) => {
     const amount = (_.isEmpty(ctx.state.command.args)) ? 1 :
       _.chain(ctx.state.command.splitArgs)
       .first()
@@ -75,13 +77,17 @@ module.exports = {
 
   // Process messages without a command
   message: (ctx) => {
+    // For now we don't process non-message events,
+    // such as edit events
+    if (ctx.updateType !== 'message') return;
+
     // If message is empty or command, ignore it
     if (_.isEmpty(ctx.message.text) || (ctx.message.text[0] === '/')) return;
 
-    // There is no messages to react
+    // There is no events to react
     if (!ctx.session.state) return;
 
     // Process event in responder specified by the state type
-    responders.responders[ctx.session.state.type](ctx);
+    responders(ctx);
   },
 };

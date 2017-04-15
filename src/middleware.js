@@ -1,27 +1,26 @@
 const _ = require('lodash');
-const db = require('./database');
+const session = require('./session');
 
 module.exports = {
-  async getSession(ctx, next) {
-    // For now we don't process non-message events,
-    // such as edit events
-    if (ctx.updateType !== 'message') return;
-
-    let user = await db.getUser(ctx.message.from.id);
-
-    // If user doesn't exist, create new user
-    if (!user) {
-      await db.createUser(ctx.message.from.id);
-      user = await db.getUser(ctx.message.from.id);
-    }
-
-    ctx.session = {
-      username: user.piikki_username,
-      defaultGroup: user.default_group,
-      state: JSON.parse(user.json_state),
-    };
-
+  getSession: async (ctx, next) => {
+    ctx.session = await session.getUser(ctx.from.id);
     next();
+  },
+
+  // Check if message is from private chat
+  isPrivate: (ctx, next) => {
+    if (ctx.chat.type === 'group') {
+      ctx.telegram.sendMessage(
+        ctx.chat.id,
+        `Tämä komento toimii vain <a href="t.me/${ctx.options.username}">private-chatissa</a>.`,
+        {
+          parse_mode: 'HTML',
+          disable_web_page_preview: true,
+        }
+      );
+    } else {
+      next();
+    }
   },
 
   // Check if there is a link between telegram ID and piikki username

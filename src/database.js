@@ -1,33 +1,28 @@
+const _ = require('lodash');
 const knex = require('knex');
 const cfg = require('../config');
 
 const db = knex(cfg.db);
 
 module.exports = {
-  async createUser(telegramId) {
-    return db('user')
-    .insert({ telegram_id: telegramId });
-  },
+  createUser: async telegramId => db('user')
+    .insert({ telegram_id: telegramId }),
 
-  async linkUser(telegramId, username) {
-    return db('user')
+  linkUser: async (telegramId, username) => db('user')
     .where({ telegram_id: telegramId })
-    .update({ piikki_username: username });
-  },
+    .update({ piikki_username: username }),
 
-  async unlinkUser(telegramId) {
-    return db('user')
+  unlinkUser: async telegramId => db('user')
     .where({ telegram_id: telegramId })
-    .update({ piikki_username: null, json_state: null });
-  },
+    .update({ piikki_username: null, json_state: null }),
 
-  async getUser(telegramId) {
-    return db('user')
+  getUser: async telegramId => db('user')
     .first()
-    .where({ telegram_id: telegramId });
-  },
+    .where({ telegram_id: telegramId }),
 
-  async getUserState(telegramId) {
+  getUsers: async () => db('user'),
+
+  getUserState: async (telegramId) => {
     const user = await db('user')
       .first('json_state')
       .where({ telegram_id: telegramId });
@@ -35,15 +30,11 @@ module.exports = {
     return user ? JSON.parse(user.json_state) : null;
   },
 
-  async setUserState(telegramId, state) {
-    return db('user')
+  setUserState: async (telegramId, state) => db('user')
     .where({ telegram_id: telegramId })
-    .update({ json_state: (state ? JSON.stringify(state) : null) });
-  },
+    .update({ json_state: (_.isObject(state) ? JSON.stringify(state) : null) }),
 
-  async setDefaultGroup(telegramId, groupName) {
-    return db('user')
+  setDefaultGroup: async (telegramId, groupName) => db('user')
     .where({ telegram_id: telegramId })
-    .update({ default_group: groupName });
-  },
+    .update({ default_group: groupName }),
 };
