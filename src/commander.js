@@ -7,7 +7,7 @@ module.exports = {
 
   // ## /kirjaudu
   // Link telegram id with piikki username
-  async login(ctx) {
+  login: async (ctx) => {
     if (ctx.session.username) {
       ctx.reply(`Olet jo kirjautunut tunnuksella ${ctx.session.username}`);
     } else {
@@ -19,7 +19,7 @@ module.exports = {
 
   // ## /saldo
   // Lists saldos in each group
-  async saldo(ctx) {
+  saldo: async (ctx) => {
     const user = await api.getUser(ctx.session.username);
 
     if (_.isEmpty(user.saldos)) {
@@ -33,7 +33,7 @@ module.exports = {
 
   // ## /lisaa [amount]
   // Add credit by certain amount, default is 1
-  async add(ctx) {
+  add: async (ctx) => {
     const amount = (_.isEmpty(ctx.state.command.args)) ? 1 :
       _.chain(ctx.state.command.splitArgs)
       .first()
@@ -54,7 +54,7 @@ module.exports = {
 
   // ## /viiva [amount]
   // Takes credit by certain amount
-  async subtract(ctx) {
+  subtract: async (ctx) => {
     const amount = (_.isEmpty(ctx.state.command.args)) ? 1 :
       _.chain(ctx.state.command.splitArgs)
       .first()

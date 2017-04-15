@@ -37,59 +37,18 @@ async function del(url, payload) {
 }
 
 module.exports = {
-  async getUsers() {
-    return get('/users');
-  },
-
-  async getUser(username) {
-    return get(`/users/${username}`);
-  },
-
-  async deleteUser(username) {
-    return del('/users', { username });
-  },
-
-  async createUser(username, password) {
-    return post('/users/create', { username, password });
-  },
-
-  async authenticateUser(username, password) {
-    return post('/users/authenticate', { username, password });
-  },
-
-  async resetPassword(username, oldPassword, newPassword) {
-    return put('/users/reset/password', { username, oldPassword, newPassword });
-  },
-
-  async resetUsername(oldUsername, newUsername, password) {
-    return put('/users/reset/username', { oldUsername, newUsername, password });
-  },
-
-  async getGroups() {
-    return get('/groups');
-  },
-
-  async getGroupMembers(groupName) {
-    return get(`/groups/${groupName}/members`);
-  },
-
-  async getGroupMember(groupName, username) {
-    return get(`/groups/${groupName}/members/${username}`);
-  },
-
-  async createGroup(groupName) {
-    return post('/groups/create', { groupName });
-  },
-
-  async addMemberToGroup(groupName, username) {
-    return post(`/groups/${groupName}/addMember`, { username });
-  },
-
-  async removeMemberFromGroup(groupName, username) {
-    return del(`/groups/${groupName}/removeMember`, { username });
-  },
-
-  async makeTransaction(groupName, username, amount) {
-    return post('/transaction', { groupName, username, amount });
-  },
+  getUsers: async () => get('/users'),
+  getUser: async username => get(`/users/${username}`),
+  deleteUser: async username => del('/users', { username }),
+  createUser: async (username, password) => post('/users/create', { username, password }),
+  authenticateUser: async (username, password) => post('/users/authenticate', { username, password }),
+  resetPassword: async (username, oldPassword, newPassword) => put('/users/reset/password', { username, oldPassword, newPassword }),
+  resetUsername: async (oldUsername, newUsername, password) => put('/users/reset/username', { oldUsername, newUsername, password }),
+  getGroups: async () => get('/groups'),
+  getGroupMembers: async groupName => get(`/groups/${groupName}/members`),
+  getGroupMember: async (groupName, username) => get(`/groups/${groupName}/members/${username}`),
+  createGroup: async groupName => post('/groups/create', { groupName }),
+  addMemberToGroup: async (groupName, username) => post(`/groups/${groupName}/addMember`, { username }),
+  removeMemberFromGroup: async (groupName, username) => del(`/groups/${groupName}/removeMember`, { username }),
+  makeTransaction: async (groupName, username, amount) => post('/transaction', { groupName, username, amount }),
 };

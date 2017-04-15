@@ -2,7 +2,7 @@ const _ = require('lodash');
 const db = require('./database');
 
 module.exports = {
-  async getSession(ctx, next) {
+  getSession: async (ctx, next) => {
     // For now we don't process non-message events,
     // such as edit events
     if (ctx.updateType !== 'message') return;

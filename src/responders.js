@@ -18,7 +18,7 @@ const states = {
 const responders = {
 
   // Takes username and asks for password
-  async loginUsername(ctx) {
+  askUsername: async (ctx) => {
     if (ctx.message.text.length < 20) {
       await db.setUserState(ctx.message.from.id, states.loginPassword(ctx.message.text));
       ctx.reply('Syötä salasana');
@@ -26,7 +26,7 @@ const responders = {
   },
 
   // Takes password and tries to authenticate the user
-  async loginPassword(ctx) {
+  askPassword: async (ctx) => {
     const username = ctx.session.state.payload.username;
     const password = ctx.message.text;
 
