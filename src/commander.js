@@ -29,8 +29,8 @@ module.exports = {
       return;
     }
 
-    const saldos = _.map(user.saldos, (saldo, group) => `*${group}*: ${saldo}`);
-    ctx.replyWithMarkdown(`Ryhmiesi saldot:\n${_.join(saldos, '\n')}`);
+    const saldos = _.map(user.saldos, (saldo, group) => `<b>${group}</b>: ${saldo}`);
+    ctx.replyWithHTML(`Saldosi:\n${_.join(saldos, '\n')}`);
   },
 
   // ## /lisaa [amount]
