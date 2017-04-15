@@ -3,13 +3,24 @@ const session = require('./session');
 
 module.exports = {
   getSession: async (ctx, next) => {
-    // For now we don't process non-message events,
-    // such as edit events
-    if (ctx.updateType !== 'message') return;
-
-    ctx.session = await session.getUser(ctx.message.from.id);
-
+    ctx.session = await session.getUser(ctx.from.id);
     next();
+  },
+
+  // Check if message is from private chat
+  isPrivate: (ctx, next) => {
+    if (ctx.chat.type === 'group') {
+      ctx.telegram.sendMessage(
+        ctx.chat.id,
+        `Tämä komento toimii vain <a href="t.me/${ctx.options.username}">private-chatissa</a>.`,
+        {
+          parse_mode: 'HTML',
+          disable_web_page_preview: true,
+        }
+      );
+    } else {
+      next();
+    }
   },
 
   // Check if there is a link between telegram ID and piikki username

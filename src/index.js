@@ -11,8 +11,8 @@ const bot = new Telegraf(cfg.tgToken);
 bot.use(commandParts());
 bot.use(middleware.getSession);
 
-bot.command('start', commander.login);
-bot.command('kirjaudu', commander.login);
+bot.command('start', middleware.isPrivate, commander.login);
+bot.command('kirjaudu', middleware.isPrivate, commander.login);
 
 bot.command('saldo', middleware.loggedIn, commander.saldo);
 bot.command('lisaa', middleware.loggedIn, commander.add);

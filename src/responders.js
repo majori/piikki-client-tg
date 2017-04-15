@@ -9,8 +9,8 @@ const login = {
   // Takes username and asks for password
   askUsername: async (ctx) => {
     if (ctx.message.text.length < 20) {
-      await session.updateSession(ctx.message.from.id, states.loginAskPassword(ctx.message.text));
-      ctx.reply('Syötä salasana');
+      await session.updateSession(ctx.from.id, states.loginAskPassword(ctx.message.text));
+      ctx.telegram.sendMessage(ctx.from.id, 'Syötä salasana');
     }
   },
 
@@ -24,16 +24,19 @@ const login = {
       res = await api.authenticateUser(username, password);
     } catch (err) {
       // Request failed or more commonly username doesn't exist
-      ctx.reply('Väärä tunnus tai salasana, yritä /kirjaudu uudelleen.');
+      ctx.telegram.sendMessage(ctx.from.id, 'Väärä tunnus tai salasana, yritä /kirjaudu uudelleen.');
       return;
     }
 
     if (res.authenticated) {
       await session.linkUser(ctx.message.from.id, username);
-      ctx.replyWithMarkdown(
-        `*Kirjauduit onnistuneesti käyttäjällä ${username}!* ` +
+      ctx.telegram.sendMessage(ctx.from.id,
+        `<b>Kirjauduit onnistuneesti käyttäjällä ${username}!</b> ` +
         'Suosittelen poistamaan äsken lähettämäsi viestin ' +
-        'ettei salasanasi joudu vahingossa vääriin käsiin.'
+        'ettei salasanasi joudu vahingossa vääriin käsiin.',
+        {
+          parse_mode: 'HTML',
+        }
       );
 
       // Set default group if the user has only one
@@ -44,7 +47,7 @@ const login = {
       }
     } else {
       // Password was wrong
-      ctx.reply('Väärä tunnus tai salasana, yritä /kirjaudu uudelleen.');
+      ctx.telegram.sendMessage(ctx.from.id, 'Väärä tunnus tai salasana, yritä /kirjaudu uudelleen.');
     }
 
     await session.resetSession(ctx.message.from.id);

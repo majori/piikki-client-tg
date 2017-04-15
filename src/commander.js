@@ -8,13 +8,15 @@ module.exports = {
   // ## /kirjaudu
   // Link telegram id with piikki username
   login: async (ctx) => {
+    // Check if there is already a link
     if (ctx.session.username) {
       ctx.reply(`Olet jo kirjautunut tunnuksella ${ctx.session.username}`);
-    } else {
-      // Start the login process
-      await session.updateSession(ctx.message.from.id, session.constants.states.loginAskUsername());
-      ctx.reply('Syötä Piikki-tunnuksesi');
+      return;
     }
+
+    // Start the login process
+    await session.updateSession(ctx.from.id, session.constants.states.loginAskUsername());
+    ctx.reply('Syötä Piikki-tunnuksesi');
   },
 
   // ## /saldo
@@ -75,6 +77,10 @@ module.exports = {
 
   // Process messages without a command
   message: (ctx) => {
+    // For now we don't process non-message events,
+    // such as edit events
+    if (ctx.updateType !== 'message') return;
+
     // If message is empty or command, ignore it
     if (_.isEmpty(ctx.message.text) || (ctx.message.text[0] === '/')) return;
 
