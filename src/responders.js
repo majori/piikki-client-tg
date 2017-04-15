@@ -1,26 +1,15 @@
 const _ = require('lodash');
-const db = require('./database');
 const api = require('./api');
+const session = require('./session');
 
-const states = {
-  loginPassword: username => ({
-    type: 'loginPassword',
-    payload: {
-      username,
-    },
-  }),
+const states = session.constants.states;
 
-  loginUsername: () => ({
-    type: 'loginUsername',
-  }),
-};
-
-const responders = {
-
+// Responders which take login related states
+const login = {
   // Takes username and asks for password
   askUsername: async (ctx) => {
     if (ctx.message.text.length < 20) {
-      await db.setUserState(ctx.message.from.id, states.loginPassword(ctx.message.text));
+      await session.updateSession(ctx.message.from.id, states.loginAskPassword(ctx.message.text));
       ctx.reply('Syötä salasana');
     }
   },
@@ -34,26 +23,46 @@ const responders = {
     try {
       res = await api.authenticateUser(username, password);
     } catch (err) {
-      ctx.reply('Tapahtui virhe, yritä kirjautumista uudelleen');
+      // Request failed or more commonly username doesn't exist
+      ctx.reply('Väärä tunnus tai salasana, yritä /kirjaudu uudelleen.');
       return;
     }
 
     if (res.authenticated) {
-      await db.linkUser(ctx.message.from.id, username);
-      ctx.reply(`Kirjauduit onnistuneesti käyttäjällä ${username}!`);
+      await session.linkUser(ctx.message.from.id, username);
+      ctx.replyWithMarkdown(
+        `*Kirjauduit onnistuneesti käyttäjällä ${username}!* ` +
+        'Suosittelen poistamaan äsken lähettämäsi viestin ' +
+        'ettei salasanasi joudu vahingossa vääriin käsiin.'
+      );
 
       // Set default group if the user has only one
       const user = await api.getUser(username);
       if (_.size(user.saldos) === 1) {
         const groupName = _.chain(user.saldos).keys().first().value();
-        await db.setDefaultGroup(ctx.message.from.id, groupName);
+        await session.setDefaultGroup(ctx.message.from.id, groupName);
       }
     } else {
+      // Password was wrong
       ctx.reply('Väärä tunnus tai salasana, yritä /kirjaudu uudelleen.');
     }
 
-    await db.setUserState(ctx.message.from.id, null);
+    await session.resetSession(ctx.message.from.id);
   },
 };
 
-module.exports = { states, responders };
+const types = session.constants.types;
+
+module.exports = async (ctx) => {
+  switch (ctx.session.state.type) {
+    case types.LOGIN_ASK_USERNAME:
+      login.askUsername(ctx);
+      break;
+
+    case types.LOGIN_ASK_PASSWORD:
+      login.askPassword(ctx);
+      break;
+
+    default:
+  }
+};

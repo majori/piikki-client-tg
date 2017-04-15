@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const db = require('./database');
+const session = require('./session');
 
 module.exports = {
   getSession: async (ctx, next) => {
@@ -7,19 +7,7 @@ module.exports = {
     // such as edit events
     if (ctx.updateType !== 'message') return;
 
-    let user = await db.getUser(ctx.message.from.id);
-
-    // If user doesn't exist, create new user
-    if (!user) {
-      await db.createUser(ctx.message.from.id);
-      user = await db.getUser(ctx.message.from.id);
-    }
-
-    ctx.session = {
-      username: user.piikki_username,
-      defaultGroup: user.default_group,
-      state: JSON.parse(user.json_state),
-    };
+    ctx.session = await session.getUser(ctx.message.from.id);
 
     next();
   },

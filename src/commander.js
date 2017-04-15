@@ -1,6 +1,6 @@
 const _ = require('lodash');
-const db = require('./database');
 const api = require('./api');
+const session = require('./session');
 const responders = require('./responders');
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
       ctx.reply(`Olet jo kirjautunut tunnuksella ${ctx.session.username}`);
     } else {
       // Start the login process
-      await db.setUserState(ctx.message.from.id, responders.states.loginUsername());
+      await session.updateSession(ctx.message.from.id, session.constants.states.loginAskUsername());
       ctx.reply('Syötä Piikki-tunnuksesi');
     }
   },
@@ -27,8 +27,8 @@ module.exports = {
       return;
     }
 
-    const saldos = _.map(user.saldos, (saldo, group) => `${group}: ${saldo}`);
-    ctx.reply(`Saldosi:\n${_.join(saldos, '\n')}`);
+    const saldos = _.map(user.saldos, (saldo, group) => `*${group}*: ${saldo}`);
+    ctx.replyWithMarkdown(`Ryhmiesi saldot:\n${_.join(saldos, '\n')}`);
   },
 
   // ## /lisaa [amount]
@@ -78,10 +78,10 @@ module.exports = {
     // If message is empty or command, ignore it
     if (_.isEmpty(ctx.message.text) || (ctx.message.text[0] === '/')) return;
 
-    // There is no messages to react
+    // There is no events to react
     if (!ctx.session.state) return;
 
     // Process event in responder specified by the state type
-    responders.responders[ctx.session.state.type](ctx);
+    responders(ctx);
   },
 };
