@@ -42,6 +42,21 @@ module.exports = {
   // Takes credit by certain amount
   subtract: async ctx => helpers.makeTransaction(ctx, true),
 
+  // ## /nakki [amount]
+  // Add credit to saldo with comment "effort"
+  addWithEffort: async ctx => helpers.makeTransaction(ctx, false, 'effort'),
+
+  createAccount: async (ctx) => {
+    // Check if there is already a link
+    if (ctx.session.username) {
+      ctx.reply(`Olet jo kirjautunut tunnuksella ${ctx.session.username}`);
+      return;
+    }
+
+    await session.updateSession(ctx.from.id, session.constants.states.createAccountUsername());
+    ctx.reply('Syötä Piikki-tilillesi tunnus');
+  },
+
   // Process messages without a command
   message: (ctx) => {
     // For now we don't process non-message events,

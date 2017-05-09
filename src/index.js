@@ -16,6 +16,7 @@ bot.command('kirjaudu', middleware.isPrivate, commander.login);
 
 bot.command('saldo', middleware.loggedIn, commander.saldo);
 bot.command('lisaa', middleware.loggedIn, commander.add);
+bot.command('nakki', middleware.loggedIn, commander.addWithEffort);
 bot.command('viiva', middleware.loggedIn, commander.subtract);
 
 bot.on('message', commander.message);

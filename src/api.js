@@ -50,5 +50,5 @@ module.exports = {
   createGroup: async groupName => post('groups/create', { groupName }),
   addMemberToGroup: async (groupName, username) => post(`groups/${groupName}/addMember`, { username }),
   removeMemberFromGroup: async (groupName, username) => del(`groups/${groupName}/removeMember`, { username }),
-  makeTransaction: async (groupName, username, amount) => post('transaction', { groupName, username, amount }),
+  makeTransaction: async (groupName, username, amount, comment) => post('transaction', { groupName, username, amount, comment }),
 };

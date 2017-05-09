@@ -2,7 +2,7 @@ const _ = require('lodash');
 const api = require('./api');
 
 module.exports = {
-  makeTransaction: async (ctx, subtract) => {
+  makeTransaction: async (ctx, subtract, comment) => {
     const amount = (_.isEmpty(ctx.state.command.args)) ? 1 :
       _.chain(ctx.state.command.splitArgs)
       .first()
@@ -14,7 +14,8 @@ module.exports = {
         const res = await api.makeTransaction(
           ctx.session.defaultGroup,
           ctx.session.username,
-          (subtract ? -amount : amount)
+          (subtract ? -amount : amount),
+          comment
         );
         if (res) {
           ctx.reply(`Saldosi ryhmässä ${ctx.session.defaultGroup}: ${_.first(res).saldo}`);
