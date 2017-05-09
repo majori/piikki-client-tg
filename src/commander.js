@@ -2,6 +2,7 @@ const _ = require('lodash');
 const api = require('./api');
 const session = require('./session');
 const responders = require('./responders');
+const helpers = require('./helpers');
 
 module.exports = {
 
@@ -35,44 +36,25 @@ module.exports = {
 
   // ## /lisaa [amount]
   // Add credit by certain amount, default is 1
-  add: async (ctx) => {
-    const amount = (_.isEmpty(ctx.state.command.args)) ? 1 :
-      _.chain(ctx.state.command.splitArgs)
-      .first()
-      .toLength()
-      .value();
-
-    if (amount > 0) {
-      if (ctx.session.defaultGroup) {
-        const res = await api.makeTransaction(ctx.session.defaultGroup, ctx.session.username, amount);
-        if (res) {
-          ctx.reply(`Saldosi ryhmässä ${ctx.session.defaultGroup}: ${_.first(res).saldo}`);
-        }
-      }
-    } else {
-      ctx.reply(`"${_.first(ctx.state.command.splitArgs)}" ei ollut positiivinen kokonaisluku`);
-    }
-  },
+  add: async ctx => helpers.makeTransaction(ctx, false),
 
   // ## /viiva [amount]
   // Takes credit by certain amount
-  subtract: async (ctx) => {
-    const amount = (_.isEmpty(ctx.state.command.args)) ? 1 :
-      _.chain(ctx.state.command.splitArgs)
-      .first()
-      .toLength()
-      .value();
+  subtract: async ctx => helpers.makeTransaction(ctx, true),
 
-    if (amount > 0) {
-      if (ctx.session.defaultGroup) {
-        const res = await api.makeTransaction(ctx.session.defaultGroup, ctx.session.username, -amount);
-        if (res) {
-          ctx.reply(`Saldosi ryhmässä ${ctx.session.defaultGroup}: ${_.first(res).saldo}`);
-        }
-      }
-    } else {
-      ctx.reply(`"${_.first(ctx.state.command.splitArgs)}" ei ollut positiivinen kokonaisluku`);
+  // ## /nakki [amount]
+  // Add credit to saldo with comment "effort"
+  addWithEffort: async ctx => helpers.makeTransaction(ctx, false, 'effort'),
+
+  createAccount: async (ctx) => {
+    // Check if there is already a link
+    if (ctx.session.username) {
+      ctx.reply(`Olet jo kirjautunut tunnuksella ${ctx.session.username}`);
+      return;
     }
+
+    await session.updateSession(ctx.from.id, session.constants.states.createAccountUsername());
+    ctx.reply('Syötä Piikki-tilillesi tunnus');
   },
 
   // Process messages without a command
