@@ -18,7 +18,7 @@ module.exports = {
           comment
         );
         if (res) {
-          ctx.reply(`Saldosi ryhmässä ${ctx.session.defaultGroup}: ${_.first(res).saldo}`);
+          ctx.reply(`Saldosi ryhmässä ${ctx.session.defaultGroup}: ${res.saldo}`);
         }
       }
     } else {
