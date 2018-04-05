@@ -1,16 +1,13 @@
 {
   "name": "piikki-client-tg",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Telegram client for piikki",
   "main": "src/index.js",
   "engines": {
-    "node": ">=7.6.0"
+    "node": "8.11.1"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon --debug=5858 src/index.js",
-    "migrate:latest": "knex migrate:latest",
-    "migrate:rollback": "knex migrate:rollback"
+
   },
   "repository": {
     "type": "git",
@@ -26,19 +23,9 @@
   },
   "homepage": "https://github.com/majori/piikki-client-tg#readme",
   "dependencies": {
-    "bluebird": "^3.5.0",
-    "knex": "^0.12.9",
-    "lodash": "^4.17.4",
-    "mssql": "^3.3.0",
-    "superagent": "^3.5.2",
-    "telegraf": "^3.6.7",
-    "telegraf-command-parts": "^1.0.3"
+
   },
   "devDependencies": {
-    "eslint": "^3.18.0",
-    "eslint-config-airbnb": "^14.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.9.0"
+
   }
 }
