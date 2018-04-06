@@ -12,10 +12,18 @@ export const getUser = async (username: string) =>
   getResult<User>(axios.get(`/users/${username}`));
 
 export const authenticateUser = async (username: string, password: string) =>
-  getResult<UserAuth>(axios.post('/authenticate', { username, password }));
+  getResult<UserAuth>(axios.post('/users/authenticate', { username, password }));
 
 export const getUserById = async (id: string) =>
   getResult<AlternativeUserAuth>(axios.post('/users/authenticate/alternative', { key: _.toString(id), type: 30 }));
 
-export const makeTransaction = async (username: string, groupName: string, amount: number, comment: string | null) =>
+export const saveIdForUser = async (username: string, id: string) =>
+  getResult<AlternativeUserAuth>(
+    axios.post(
+      '/users/authenticate/alternative/create',
+      { username, key: _.toString(id), type: 30 },
+    ),
+  );
+
+export const makeTransaction = async (username: string, groupName: string, amount: number, comment?: string) =>
   getResult<Transaction>(axios.post('/transaction', { username, groupName, amount }));

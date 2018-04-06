@@ -1,7 +1,10 @@
 import _ from 'lodash';
 import * as api from '../api';
 
-const makeTransaction = async (ctx: any, positive: boolean, comment: string | null) => {
+const makeTransaction = async (ctx: any, positive: boolean, comment?: string) => {
+  if (!ctx.state.defaultGroup) {
+    return ctx.reply('No default group');
+  }
   const amount = _.toNumber(ctx.state.command.splitArgs[0] || 1);
   if (amount) {
     const res = await api.makeTransaction(
@@ -16,6 +19,6 @@ const makeTransaction = async (ctx: any, positive: boolean, comment: string | nu
   }
 };
 
-export const add = _.partial(makeTransaction, _, true, null);
-export const subtract = _.partial(makeTransaction, _, false, null);
+export const add = _.partial(makeTransaction, _, true);
+export const subtract = _.partial(makeTransaction, _, false);
 export const effort = _.partial(makeTransaction, _, true, 'effort');
