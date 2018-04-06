@@ -15,7 +15,9 @@ middlewares(bot);
 commands(bot);
 
 if (!config.env.prod) {
+  bot.telegram.deleteWebhook();
   bot.startPolling();
 } else {
-  bot.startWebhook(`/${config.tg.token}`, null, config.tg.port);
+  bot.telegram.setWebhook(`${config.tg.webhook}/bot${config.tg.token}`);
+  bot.startWebhook(`/bot${config.tg.token}`, null, config.tg.port);
 }
