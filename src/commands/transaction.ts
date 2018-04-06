@@ -4,7 +4,7 @@ import * as api from '../api';
 const makeTransaction = async (ctx: any, positive: boolean, comment?: string) => {
   if (!ctx.state.defaultGroup) {
     return ctx.reply(
-      'It seems that you haven\'t any of your groups as a default. ' +
+      'It seems that you haven\'t any of your groups set as default group. ' +
       'You can do it with the `/setdefault` command.',
       { parse_mode: 'Markdown' },
     );

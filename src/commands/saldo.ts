@@ -8,8 +8,11 @@ export default async (ctx: any) => {
     ctx.reply('You are not a member in any group.');
   }
 
+  const maxLength = _.maxBy(_.keys(user.saldos), _.size) as any;
+  const message = _.map(user.saldos, (saldo, group) => `${_.padStart(group, maxLength)}: ${saldo}`).join('\n');
+
   ctx.reply(
-    _.map(user.saldos, (saldo, group) => `*${group}*: ${saldo}`).join('\n'),
+    '```\n' + message + '\n```',
     { parse_mode: 'Markdown' },
   );
 };
