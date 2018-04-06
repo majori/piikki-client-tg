@@ -1,16 +1,16 @@
 {
   "name": "piikki-client-tg",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Telegram client for piikki",
   "main": "src/index.js",
   "engines": {
-    "node": ">=7.6.0"
+    "node": "8.x"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon --debug=5858 src/index.js",
-    "migrate:latest": "knex migrate:latest",
-    "migrate:rollback": "knex migrate:rollback"
+    "start": "node build/index.js",
+    "build": "tsc -p ./tsconfig.json --listEmittedFiles",
+    "dev": "nodemon --inspect -r dotenv/config -r ts-node/register src/index.ts",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -26,19 +26,18 @@
   },
   "homepage": "https://github.com/majori/piikki-client-tg#readme",
   "dependencies": {
-    "bluebird": "^3.5.0",
-    "knex": "^0.12.9",
-    "lodash": "^4.17.4",
-    "mssql": "^3.3.0",
-    "superagent": "^3.5.2",
-    "telegraf": "^3.6.7",
+    "axios": "^0.18.0",
+    "lodash": "^4.17.5",
+    "telegraf": "^3.20.0",
     "telegraf-command-parts": "^1.0.3"
   },
   "devDependencies": {
-    "eslint": "^3.18.0",
-    "eslint-config-airbnb": "^14.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.9.0"
+    "@types/lodash": "^4.14.106",
+    "@types/node": "^9.6.2",
+    "dotenv": "^5.0.1",
+    "nodemon": "^1.17.3",
+    "ts-node": "^5.0.1",
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.1"
   }
 }

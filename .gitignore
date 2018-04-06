@@ -36,5 +36,8 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-.vscode/
-env.ps1
+.env*
+!.env-sample
+
+build/
+!build/.gitignore

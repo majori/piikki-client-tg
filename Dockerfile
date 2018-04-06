@@ -1,4 +1,4 @@
-FROM node:8.3.0
+FROM node:8.11.1
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -9,7 +9,8 @@ RUN npm install
 ENV NODE_ENV production
 
 COPY . /usr/src/app
+RUN npm run build
 
-EXPOSE 4000
+EXPOSE 5000
 
 CMD [ "npm", "start" ]
