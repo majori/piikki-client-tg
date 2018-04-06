@@ -14,3 +14,15 @@ declare interface User {
 declare interface UserAuth {
   authenticated: boolean;
 }
+
+declare interface AlternativeUserAuth {
+  authenticated: boolean;
+  username: string;
+  groupName: string;
+}
+
+declare interface Transaction {
+  username: string;
+  saldo: number;
+}
+

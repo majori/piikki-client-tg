@@ -19,4 +19,3 @@ if (!config.env.prod) {
 } else {
   bot.startWebhook(`/${config.tg.token}`, null, config.tg.port);
 }
-

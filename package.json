@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node build/index.js",
     "build": "tsc -p ./tsconfig.json --listEmittedFiles",
-    "dev": "nodemon --inspect -r ts-node/register src/index.ts",
+    "dev": "nodemon --inspect -r dotenv/config -r ts-node/register src/index.ts",
     "postinstall": "npm run build"
   },
   "repository": {
@@ -28,11 +28,13 @@
   "dependencies": {
     "axios": "^0.18.0",
     "lodash": "^4.17.5",
-    "telegraf": "^3.20.0"
+    "telegraf": "^3.20.0",
+    "telegraf-command-parts": "^1.0.3"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.106",
     "@types/node": "^9.6.2",
+    "dotenv": "^5.0.1",
     "nodemon": "^1.17.3",
     "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
