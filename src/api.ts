@@ -27,3 +27,6 @@ export const saveIdForUser = async (username: string, id: string) =>
 
 export const makeTransaction = async (username: string, groupName: string, amount: number, comment?: string) =>
   getResult<Transaction>(axios.post('/transaction', { username, groupName, amount }));
+
+export const setDefaultGroup = async (username: string, groupName: string) =>
+  getResult<any>(axios.post(`/users/${username}/defaultGroup`, { groupName }));

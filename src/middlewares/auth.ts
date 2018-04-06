@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import * as api from '../api';
 
-const sessions: { [id: string]: User } = {};
+export const sessions: { [id: string]: User } = {};
 
 export default async (ctx: any, next: any) => {
   if (!ctx.state.command || ctx.state.command.command === 'login') {

@@ -3,7 +3,11 @@ import * as api from '../api';
 
 const makeTransaction = async (ctx: any, positive: boolean, comment?: string) => {
   if (!ctx.state.defaultGroup) {
-    return ctx.reply('No default group');
+    return ctx.reply(
+      'It seems that you haven\'t any of your groups as a default. ' +
+      'You can do it with the `/setdefault` command.',
+      { parse_mode: 'Markdown' },
+    );
   }
   const amount = _.toNumber(ctx.state.command.splitArgs[0] || 1);
   if (amount) {
@@ -13,9 +17,12 @@ const makeTransaction = async (ctx: any, positive: boolean, comment?: string) =>
       positive ? amount : -amount,
       comment,
     );
-    ctx.reply(res);
+    ctx.reply(
+      `Your new saldo in group *${ctx.state.defaultGroup}* is *${res.saldo}*`,
+      { parse_mode: 'Markdown' },
+    );
   } else {
-    ctx.reply('Not a number.');
+    ctx.reply('The amount wasn\'t a number.');
   }
 };
 
