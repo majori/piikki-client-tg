@@ -12,6 +12,17 @@ export default (bot: any) => {
     );
   });
 
+  bot.command('/help', (ctx: any) => {
+    ctx.reply(
+      '/add `[amount]` - Adds saldo to your default group\n' +
+      '/nakki `[amount]` - Adds saldo to your default group as \'nakki\'\n' +
+      '/saldo - Lists your saldos in each group\n' +
+      '/login - Login to your Piikki account\n' +
+      '/setdefault - Set s your default group',
+      { parse_mode: 'Markdown' },
+    );
+  });
+
   bot.command('/sub', transaction.subtract);
   bot.command('/add', transaction.add);
   bot.command('/nakki', transaction.effort);
