@@ -14,11 +14,12 @@ export default (bot: any) => {
 
   bot.command('/help', (ctx: any) => {
     ctx.reply(
-      '/add `[amount]` - Adds saldo to your default group\n' +
-      '/nakki `[amount]` - Adds saldo to your default group as \'nakki\'\n' +
-      '/saldo - Lists your saldos in each group\n' +
-      '/login - Login to your Piikki account\n' +
-      '/setdefault - Set s your default group',
+      '/add `[amount]`\n - Adds saldo to your default group\n' +
+      '/sub `[amount]`\n - Subtracts saldo from your default group\n' +
+      '/nakki `[amount]`\n - Adds saldo to your default group as \'nakki\'\n' +
+      '/saldo\n - Lists your saldos in each group\n' +
+      '/login\n - Login to your Piikki account\n' +
+      '/setdefault\n - Sets your default group',
       { parse_mode: 'Markdown' },
     );
   });

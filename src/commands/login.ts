@@ -21,7 +21,7 @@ export default async (ctx: any) => {
     }
   } else {
     ctx.reply(
-      'Try following format: `/login username password`',
+      'Please use following format: `/login` `[username]` `[password]`',
       { parse_mode: 'Markdown' },
     );
   }
