@@ -2,12 +2,12 @@ import _ from 'lodash';
 import * as api from '../api';
 
 export const setDefault = async (ctx: any) => {
-  const { saldos } = await api.getUser(ctx.state.username);
+  const { username, saldos } = await api.getUser(ctx.state.username);
   const groups = _.chain(saldos)
     .keys()
     .map((group) => ({
       text: group,
-      callback_data: _.join(['set_default_group', ctx.state.username, group], ';'),
+      callback_data: _.join(['set_default_group', username, group], ';'),
     }))
     .value();
 
