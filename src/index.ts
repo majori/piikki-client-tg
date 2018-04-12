@@ -10,6 +10,9 @@ import middlewares from './middlewares';
 
 const bot = new Telegraf(config.tg.token);
 
+// Apply logger
+bot.use(Telegraf.log());
+
 // Register middlewares
 middlewares(bot);
 
