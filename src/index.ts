@@ -10,6 +10,11 @@ import middlewares from './middlewares';
 
 const bot = new Telegraf(config.tg.token);
 
+// Apply telegram message logger if developing
+if (config.env.dev) {
+  bot.use(Telegraf.log());
+}
+
 // Register middlewares
 middlewares(bot);
 

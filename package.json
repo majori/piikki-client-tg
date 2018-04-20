@@ -1,6 +1,6 @@
 {
   "name": "piikki-client-tg",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Telegram client for piikki",
   "main": "src/index.js",
   "engines": {
@@ -29,11 +29,13 @@
     "axios": "^0.18.0",
     "lodash": "^4.17.5",
     "telegraf": "^3.20.0",
-    "telegraf-command-parts": "^1.0.3"
+    "telegraf-command-parts": "^1.0.3",
+    "winston": "^2.4.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.106",
     "@types/node": "^9.6.2",
+    "@types/winston": "^2.3.9",
     "dotenv": "^5.0.1",
     "nodemon": "^1.17.3",
     "ts-node": "^5.0.1",

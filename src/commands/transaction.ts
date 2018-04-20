@@ -1,24 +1,32 @@
 import _ from 'lodash';
 import * as api from '../api';
+import Logger from '../logger';
+
+const logger = new Logger(__dirname);
 
 const makeTransaction = async (ctx: any, positive: boolean, comment?: string) => {
-  if (!ctx.state.defaultGroup) {
+  const user = await api.getUser(ctx.state.username);
+
+  if (!user.defaultGroup) {
     return ctx.reply(
       'It seems that you haven\'t any of your groups set as default group. ' +
       'You can do it with the `/setdefault` command.',
       { parse_mode: 'Markdown' },
     );
   }
-  const amount = _.toNumber(ctx.state.command.splitArgs[0] || 1);
+  let amount = _.toNumber(ctx.state.command.splitArgs[0] || 1);
+  amount = positive ? amount : -amount;
+
   if (amount) {
     const res = await api.makeTransaction(
-      ctx.state.username,
-      ctx.state.defaultGroup,
-      positive ? amount : -amount,
+      user.username,
+      user.defaultGroup,
+      amount,
       comment,
     );
+    logger.debug('Transaction', { username: user.username, group: user.defaultGroup, amount });
     ctx.reply(
-      `Your new saldo in group *${ctx.state.defaultGroup}* is *${res.saldo}*`,
+      `Your new saldo in group *${user.defaultGroup}* is *${res.saldo}*`,
       { parse_mode: 'Markdown' },
     );
   } else {

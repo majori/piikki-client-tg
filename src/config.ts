@@ -1,6 +1,9 @@
+import { CLILoggingLevel } from 'winston';
+
 export default {
   env: {
     prod: process.env.NODE_ENV === 'production',
+    dev: process.env.NODE_ENV === 'development',
     test: process.env.NODE_ENV === 'test',
   },
   tg: {
@@ -11,5 +14,8 @@ export default {
   piikki: {
     domain: process.env.PIIKKI_DOMAIN,
     token: process.env.PIIKKI_TOKEN,
+  },
+  logging: {
+    level: (process.env.LOG_LEVEL || 'info') as CLILoggingLevel,
   },
 };

@@ -1,16 +1,13 @@
 import * as transaction from './transaction';
 import saldo from './saldo';
+import start from './start';
+import help from './help';
 import login from './login';
 import * as group from './group';
 
 export default (bot: any) => {
-  bot.command('/start', (ctx: any) => {
-    ctx.reply(
-      'Hello there! You can start by logging into your account with ' +
-      '`/login username password` command.',
-      { parse_mode: 'Markdown' },
-    );
-  });
+  bot.start(start);
+  bot.help(help);
 
   bot.command('/sub', transaction.subtract);
   bot.command('/add', transaction.add);
@@ -19,4 +16,5 @@ export default (bot: any) => {
   bot.command('/saldo', saldo);
   bot.command('/login', login);
   bot.command('/setdefault', group.setDefault);
+  bot.command('/join', group.joinGroup);
 };

@@ -30,3 +30,9 @@ export const makeTransaction = async (username: string, groupName: string, amoun
 
 export const setDefaultGroup = async (username: string, groupName: string) =>
   getResult<any>(axios.post(`/users/${username}/defaultGroup`, { groupName }));
+
+export const getGroups = async () =>
+  getResult<any>(axios.get('/groups'));
+
+export const joinGroup = async (username: string, groupName: string) =>
+  getResult<any>(axios.post(`/groups/${groupName}/addMember`, { username }));
