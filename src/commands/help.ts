@@ -6,6 +6,7 @@ export default async (ctx: any) => {
     '/saldo\n - Lists your saldos in each group\n' +
     '/login\n - Login to your Piikki account\n' +
     '/setdefault\n - Sets your default group',
+    '/join\n - Join to new group',
     { parse_mode: 'Markdown' },
   );
 };
