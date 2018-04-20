@@ -3,6 +3,7 @@ import { CLILoggingLevel } from 'winston';
 export default {
   env: {
     prod: process.env.NODE_ENV === 'production',
+    dev: process.env.NODE_ENV === 'development',
     test: process.env.NODE_ENV === 'test',
   },
   tg: {
