@@ -16,4 +16,5 @@ export default (bot: any) => {
   bot.command('/saldo', saldo);
   bot.command('/login', login);
   bot.command('/setdefault', group.setDefault);
+  bot.command('/join', group.joinGroup);
 };

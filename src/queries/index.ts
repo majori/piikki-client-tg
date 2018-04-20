@@ -20,11 +20,28 @@ export default (bot: any) => {
           _.set(sessions, [ctx.from.id, 'defaultGroup'], params[2]);
 
           ctx.reply(
-            `I\'ve succesfully set your default group to *${params[2]}*.`,
+            `I've succesfully set your default group to *${params[2]}*.`,
             { parse_mode: 'Markdown' },
           );
           break;
-        }
+
+        case 'join_group':
+          try {
+            await api.joinGroup(params[1], params[2]);
+            ctx.reply(
+              `You are now member of the group *${params[2]}*!`,
+              { parse_mode: 'Markdown' },
+            );
+          } catch (err) {
+            if (err.response.status === 400) {
+              ctx.reply(
+                `It seems that you are already a member in group *${params[2]}*`,
+                { parse_mode: 'Markdown' },
+              );
+            }
+          }
+          break;
+      }
     }
 
     return ctx.answerCbQuery();
