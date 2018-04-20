@@ -1,5 +1,8 @@
 import _ from 'lodash';
 import * as api from '../api';
+import Logger from '../logger';
+
+const logger = new Logger(__dirname);
 
 const makeTransaction = async (ctx: any, positive: boolean, comment?: string) => {
   const user = await api.getUser(ctx.state.username);
@@ -11,14 +14,17 @@ const makeTransaction = async (ctx: any, positive: boolean, comment?: string) =>
       { parse_mode: 'Markdown' },
     );
   }
-  const amount = _.toNumber(ctx.state.command.splitArgs[0] || 1);
+  let amount = _.toNumber(ctx.state.command.splitArgs[0] || 1);
+  amount = positive ? amount : -amount;
+
   if (amount) {
     const res = await api.makeTransaction(
       user.username,
       user.defaultGroup,
-      positive ? amount : -amount,
+      amount,
       comment,
     );
+    logger.debug('Transaction', { username: user.username, group: user.defaultGroup, amount });
     ctx.reply(
       `Your new saldo in group *${user.defaultGroup}* is *${res.saldo}*`,
       { parse_mode: 'Markdown' },

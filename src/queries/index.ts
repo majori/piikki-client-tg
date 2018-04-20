@@ -1,15 +1,20 @@
 import _ from 'lodash';
 import { sessions } from '../middlewares/auth';
 import * as api from '../api';
+import Logger from '../logger';
+
+const logger = new Logger(__dirname);
 
 export default (bot: any) => {
   bot.on('callback_query', async (ctx: any) => {
+    logger.debug('Callback Query', ctx.update.callback_query);
     if (ctx.update.callback_query.data) {
       const params = _.split(ctx.update.callback_query.data, ';');
 
       switch (params[0]) {
         case 'set_default_group':
           await api.setDefaultGroup(params[1], params[2]);
+          logger.debug('Set default group', { username: params[1], group: params[2] });
 
           // Update sessions with the new default group
           _.set(sessions, [ctx.from.id, 'defaultGroup'], params[2]);
