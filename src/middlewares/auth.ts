@@ -4,7 +4,7 @@ import * as api from '../api';
 export const sessions: { [id: string]: string } = {};
 
 export default async (ctx: any, next: any) => {
-  if (!ctx.state.command || _.includes(['start', 'help', 'login', 'create'], ctx.state.command.command)) {
+  if (_.includes(['start', 'help', 'login', 'create'], _.get(ctx, 'state.command.command'))) {
     return next();
   }
 

@@ -112,8 +112,3 @@ export const login = async (ctx: any) => {
     );
   }
 };
-
-export default {
-  create,
-  login,
-};

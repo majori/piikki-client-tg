@@ -8,13 +8,24 @@ const makeTransaction = async (ctx: any, positive: boolean, comment?: string) =>
   const user = await api.getUser(ctx.state.username);
 
   if (!user.defaultGroup) {
-    return ctx.reply(
+    ctx.reply(
       'It seems that you haven\'t any of your groups set as default group. ' +
       'You can do it with the `/setdefault` command.',
       { parse_mode: 'Markdown' },
     );
+    return;
   }
-  let amount = _.round(_.toNumber(_.replace(ctx.state.command.splitArgs[0], ',', '.') || 1), 2);
+
+  let rawAmount = _.get(ctx, 'state.command.splitArgs[0]');
+  if (_.isEmpty(rawAmount)) {
+    rawAmount = '1';
+  }
+
+  let amount = _.chain(rawAmount)
+    .replace(',', '.')
+    .toNumber()
+    .round(2)
+    .value();
 
   if (Math.abs(amount) >= 1e+6) {
     ctx.reply('The amount has to be less than one million.');
@@ -39,7 +50,13 @@ const makeTransaction = async (ctx: any, positive: boolean, comment?: string) =>
     logger.debug('Transaction', { username: user.username, group: user.defaultGroup, amount });
     ctx.reply(
       `Your new saldo in group *${user.defaultGroup}* is *${res.saldo}*.`,
-      { parse_mode: 'Markdown' },
+      {
+        parse_mode: 'Markdown',
+        reply_markup: (ctx.message.chat.type === 'private') ? {
+          keyboard: [[{ text: '-1'}, { text: '+1' }]],
+          resize_keyboard: true,
+        } : undefined,
+      },
     );
   } else {
     ctx.reply('The amount wasn\'t a number.');
