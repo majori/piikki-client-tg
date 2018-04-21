@@ -8,7 +8,7 @@ export const setDefault = async (ctx: any) => {
     // User already has a default group
     if (defaultGroup) {
       ctx.reply(
-        `Your default group is already set to *${defaultGroup}*, you are good to go!`,
+        `Your default group is already set to *${defaultGroup}* and its your only group, you are good to go!`,
         { parse_mode: 'Markdown' },
       );
 
@@ -37,7 +37,11 @@ export const setDefault = async (ctx: any) => {
     return;
   }
 
-  ctx.reply('Pick one of the following groups as a default one', {
+  if (ctx.message.chat.type !== 'private') {
+    ctx.reply('Let\'s continue in the private chat.');
+  }
+
+  ctx.telegram.sendMessage(ctx.message.from.id, 'Pick one of the following groups as a default one', {
     reply_markup: {
       inline_keyboard: _.chunk(groups, 2),
     },
@@ -63,7 +67,11 @@ export const joinGroup = async (ctx: any) => {
     return;
   }
 
-  ctx.reply('Join one of the following groups', {
+  if (ctx.message.chat.type !== 'private') {
+    ctx.reply('Let\'s continue in the private chat.');
+  }
+
+  ctx.telegram.sendMessage(ctx.message.from.id, 'Join one of the following groups', {
     reply_markup: {
       inline_keyboard: _.chunk(groups, 2),
     },

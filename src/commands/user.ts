@@ -16,8 +16,18 @@ export const create = async (ctx: any) => {
   }
 
   if (username && password) {
-    if (_.size(username) <= 2) {
-      ctx.reply('Username has to have atleast 3 characters.');
+    if (_.size(username) < 3 || _.size(username) > 20) {
+      ctx.reply('Username has to be between 3 and 20 characters.');
+      return;
+    }
+
+    if (_.size(password) < 4) {
+      ctx.reply('Password has to be atleast 4 characters.');
+      return;
+    }
+
+    if (_.size(password) > 255) {
+      ctx.reply('Password has to be less than 255 characters.');
       return;
     }
 
@@ -27,14 +37,21 @@ export const create = async (ctx: any) => {
       sessions[ctx.from.id] = username;
       ctx.reply(
         `You've successfully created a new account called *${username}*. ` +
-        'Now you can join groups with command `/join`.',
+        'Now you can join groups with command `/join`.\n\n' +
+        '*NOTE*: You should delete the previous message so your password ' +
+        'won\'t get into wrong hands.',
         { parse_mode: 'Markdown' },
       );
 
     } catch (err) {
-      if (err.response.data.error.message === `Username ${username} already exists`) {
+      if (_.includes(err.response.data.error.message, 'already exists')) {
         ctx.reply(
-          `Username *${username}* already exists. Choose another one.`,
+          `Username *${username}* already exists. Please choose another one.`,
+          { parse_mode: 'Markdown' },
+        );
+      } else if (_.includes(err.response.data.error.message, 'alpha-numeric')) {
+        ctx.reply(
+          'Username must only contain alpha-numeric and underscore characters. Please choose another one.',
           { parse_mode: 'Markdown' },
         );
       } else {
@@ -42,8 +59,13 @@ export const create = async (ctx: any) => {
       }
     }
   } else {
+    let msg = 'Please use following format: /create `[username]` `[password]`.';
+    if (ctx.message.chat.type !== 'private') {
+      msg += 'I\'d prefer to do this in the private chat.';
+    }
+
     ctx.reply(
-      'Please use following format: `/create [username] [password]`',
+       msg,
       { parse_mode: 'Markdown' },
     );
   }
@@ -78,8 +100,13 @@ export const login = async (ctx: any) => {
       ctx.reply('Invalid username or password. Try again.');
     }
   } else {
+    let msg = 'Please use following format: /login `[username]` `[password]`.';
+    if (ctx.message.chat.type !== 'private') {
+      msg += ' I\'d prefer to do this in the private chat.';
+    }
+
     ctx.reply(
-      'Please use following format: /login `[username]` `[password]`',
+      msg,
       { parse_mode: 'Markdown' },
     );
   }
