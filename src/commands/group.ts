@@ -33,7 +33,7 @@ export const setDefault = async (ctx: any) => {
     .value();
 
   if (_.isEmpty(groups)) {
-    ctx.reply('You are not a member in any group yet.');
+    ctx.reply('You are not a member in any group yet. You can join groups with /join');
     return;
   }
 

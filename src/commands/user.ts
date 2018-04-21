@@ -35,6 +35,7 @@ export const create = async (ctx: any) => {
       await api.createUser(username, password);
       await api.saveIdForUser(username, ctx.from.id);
       sessions[ctx.from.id] = username;
+
       ctx.reply(
         `You've successfully created a new account called *${username}*. ` +
         'Now you can join groups with command `/join`.\n\n' +
@@ -44,12 +45,12 @@ export const create = async (ctx: any) => {
       );
 
     } catch (err) {
-      if (_.includes(err.response.data.error.message, 'already exists')) {
+      if (_.includes(_.get(err, 'response.data.error.message'), 'already exists')) {
         ctx.reply(
           `Username *${username}* already exists. Please choose another one.`,
           { parse_mode: 'Markdown' },
         );
-      } else if (_.includes(err.response.data.error.message, 'alpha-numeric')) {
+      } else if (_.includes(_.get(err, 'response.data.error.message'), 'alpha-numeric')) {
         ctx.reply(
           'Username must only contain alpha-numeric and underscore characters. Please choose another one.',
           { parse_mode: 'Markdown' },
