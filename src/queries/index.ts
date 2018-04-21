@@ -16,9 +16,6 @@ export default (bot: any) => {
           await api.setDefaultGroup(params[1], params[2]);
           logger.debug('Set default group', { username: params[1], group: params[2] });
 
-          // Update sessions with the new default group
-          _.set(sessions, [ctx.from.id, 'defaultGroup'], params[2]);
-
           ctx.reply(
             `I've succesfully set your default group to *${params[2]}*.`,
             { parse_mode: 'Markdown' },

@@ -14,7 +14,18 @@ const makeTransaction = async (ctx: any, positive: boolean, comment?: string) =>
       { parse_mode: 'Markdown' },
     );
   }
-  let amount = _.toNumber(ctx.state.command.splitArgs[0] || 1);
+  let amount = _.round(_.toNumber(_.replace(ctx.state.command.splitArgs[0], ',', '.') || 1), 2);
+
+  if (Math.abs(amount) >= 1e+6) {
+    ctx.reply('The amount has to be less than one million.');
+    return;
+  }
+
+  if (amount === 0) {
+    ctx.reply('The amount can\'t be zero.');
+    return;
+  }
+
   amount = positive ? amount : -amount;
 
   if (amount) {
@@ -24,9 +35,10 @@ const makeTransaction = async (ctx: any, positive: boolean, comment?: string) =>
       amount,
       comment,
     );
+
     logger.debug('Transaction', { username: user.username, group: user.defaultGroup, amount });
     ctx.reply(
-      `Your new saldo in group *${user.defaultGroup}* is *${res.saldo}*`,
+      `Your new saldo in group *${user.defaultGroup}* is *${res.saldo}*.`,
       { parse_mode: 'Markdown' },
     );
   } else {
