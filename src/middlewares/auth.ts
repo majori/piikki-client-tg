@@ -23,10 +23,14 @@ export default async (ctx: any, next: any) => {
 
       return next();
     } else {
+      const msg = 'Hey! It seems you are not logged in yet. ' +
+        `${(ctx.message.chat.type !== 'private') ?
+          'Send me in the private chat' :
+          'Try to login with'
+        } /login \`[username]\` \`[password]\` ` +
+        'or create a new account with /create `[username]` `[password]`';
       ctx.reply(
-        'Hey! It seems you are not logged in yet. ' +
-        'Try to login with /login `[username]` `[password]` ' +
-        'or create a new account with /create `[username]` `[password]`',
+        msg,
         { parse_mode: 'Markdown' },
       );
     }
