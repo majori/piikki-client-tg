@@ -54,21 +54,13 @@ export default (bot: any) => {
             return;
           }
 
-          try {
-            await api.partGroup(params[1], params[2]);
-            ctx.reply(
-              `You have parted from the group *${params[2]}*!`,
-              { parse_mode: 'Markdown' },
-            );
-            ctx.deleteMessage(ctx.callbackQuery.message.message_id);
-          } catch (err) {
-            if (err.response.status === 400) {
-              ctx.reply(
-                `It seems that you are already a member in group *${params[2]}*`,
-                { parse_mode: 'Markdown' },
-              );
-            }
-          }
+          await api.partGroup(params[1], params[2]);
+          ctx.reply(
+            `You have parted from the group *${params[2]}*!`,
+            { parse_mode: 'Markdown' },
+          );
+          ctx.deleteMessage(ctx.callbackQuery.message.message_id);
+
           break;
       }
     }
