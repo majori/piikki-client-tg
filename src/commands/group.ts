@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as api from '../api';
+import { CallbackDataTypeEnum } from '../constants/callbackEnum';
 
 export const setDefault = async (ctx: any) => {
   const { username, saldos, defaultGroup } = await api.getUser(ctx.state.username);
@@ -28,7 +29,7 @@ export const setDefault = async (ctx: any) => {
     .keys()
     .map((group) => ({
       text: group,
-      callback_data: _.join(['set_default_group', username, group], ';'),
+      callback_data: _.join([CallbackDataTypeEnum.setDefaultGroup, group], ';'),
     }))
     .value();
 
@@ -58,7 +59,7 @@ export const joinGroup = async (ctx: any) => {
     .difference(old)
     .map((group) => ({
       text: group,
-      callback_data: _.join(['join_group', username, group], ';'),
+      callback_data: _.join([CallbackDataTypeEnum.joinGroup, group], ';'),
     }))
     .value();
 
@@ -85,7 +86,7 @@ export const partGroup = async (ctx: any) => {
   const groups = _.chain(groupNames)
     .map((group) => ({
       text: group,
-      callback_data: _.join(['part_group', username, group], ';'),
+      callback_data: _.join([CallbackDataTypeEnum.partGroup, group], ';'),
     }))
     .value();
 
