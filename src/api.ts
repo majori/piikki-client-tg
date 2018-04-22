@@ -11,6 +11,9 @@ async function getResult<T>(req: AxiosPromise<ApiResponse<T>>) { return (await r
 export const getUser = async (username: string) =>
   getResult<User>(axios.get(`/users/${username}`));
 
+export const createUser = async (username: string, password: string) =>
+  getResult<any>(axios.post('/users/create', { username, password }));
+
 export const authenticateUser = async (username: string, password: string) =>
   getResult<UserAuth>(axios.post('/users/authenticate', { username, password }));
 

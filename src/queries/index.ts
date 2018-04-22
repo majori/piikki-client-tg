@@ -7,22 +7,20 @@ const logger = new Logger(__dirname);
 
 export default (bot: any) => {
   bot.on('callback_query', async (ctx: any) => {
-    logger.debug('Callback Query', ctx.update.callback_query);
-    if (ctx.update.callback_query.data) {
-      const params = _.split(ctx.update.callback_query.data, ';');
+    logger.debug('Callback Query', ctx.callbackQuery);
+    if (ctx.callbackQuery.data) {
+      const params = _.split(ctx.callbackQuery.data, ';');
 
       switch (params[0]) {
         case 'set_default_group':
           await api.setDefaultGroup(params[1], params[2]);
           logger.debug('Set default group', { username: params[1], group: params[2] });
 
-          // Update sessions with the new default group
-          _.set(sessions, [ctx.from.id, 'defaultGroup'], params[2]);
-
           ctx.reply(
             `I've succesfully set your default group to *${params[2]}*.`,
             { parse_mode: 'Markdown' },
           );
+          ctx.deleteMessage(ctx.callbackQuery.message.message_id);
           break;
 
         case 'join_group':
@@ -32,6 +30,7 @@ export default (bot: any) => {
               `You are now member of the group *${params[2]}*!`,
               { parse_mode: 'Markdown' },
             );
+            ctx.deleteMessage(ctx.callbackQuery.message.message_id);
           } catch (err) {
             if (err.response.status === 400) {
               ctx.reply(

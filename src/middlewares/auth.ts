@@ -4,7 +4,7 @@ import * as api from '../api';
 export const sessions: { [id: string]: string } = {};
 
 export default async (ctx: any, next: any) => {
-  if (!ctx.state.command || ctx.state.command.command === 'login') {
+  if (_.includes(['start', 'help', 'login', 'create'], _.get(ctx, 'state.command.command'))) {
     return next();
   }
 
@@ -25,7 +25,8 @@ export default async (ctx: any, next: any) => {
     } else {
       ctx.reply(
         'Hey! It seems you are not logged in yet. ' +
-        'Try to login with `/login username password`',
+        'Try to login with /login `[username]` `[password]` ' +
+        'or create a new account with /create `[username]` `[password]`',
         { parse_mode: 'Markdown' },
       );
     }

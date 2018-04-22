@@ -1,10 +1,10 @@
 {
   "name": "piikki-client-tg",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Telegram client for piikki",
   "main": "src/index.js",
   "engines": {
-    "node": "8.x"
+    "node": "8"
   },
   "scripts": {
     "start": "node build/index.js",
