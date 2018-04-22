@@ -25,4 +25,5 @@ export default (bot: any) => {
 
   bot.command('/setdefault', group.setDefault);
   bot.command('/join', group.joinGroup);
+  bot.command('/part', group.partGroup);
 };

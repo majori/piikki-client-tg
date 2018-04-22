@@ -15,7 +15,7 @@ const makeTransaction = async (ctx: any, options: TransactionOptions) => {
   if (!user.defaultGroup) {
     ctx.reply(
       'It seems that you haven\'t any of your groups set as default group. ' +
-      'You can do it with the `/setdefault` command.',
+      'You can do it with the /setdefault command.',
       { parse_mode: 'Markdown' },
     );
     return;

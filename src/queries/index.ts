@@ -40,6 +40,36 @@ export default (bot: any) => {
             }
           }
           break;
+
+        case 'part_group':
+          const { username, saldos } = await api.getUser(ctx.state.username);
+          const saldo = Number(saldos[params[2]]);
+
+          if (saldo !== 0) {
+            ctx.reply(
+              `You can only part from groups where your saldo is 0,`
+                + ` your current saldo in *${params[2]}* is *${saldo}*!`,
+              { parse_mode: 'Markdown' },
+            );
+            return;
+          }
+
+          try {
+            await api.partGroup(params[1], params[2]);
+            ctx.reply(
+              `You have parted from the group *${params[2]}*!`,
+              { parse_mode: 'Markdown' },
+            );
+            ctx.deleteMessage(ctx.callbackQuery.message.message_id);
+          } catch (err) {
+            if (err.response.status === 400) {
+              ctx.reply(
+                `It seems that you are already a member in group *${params[2]}*`,
+                { parse_mode: 'Markdown' },
+              );
+            }
+          }
+          break;
       }
     }
 

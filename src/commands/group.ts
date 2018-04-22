@@ -70,8 +70,26 @@ export const joinGroup = async (ctx: any) => {
   if (ctx.message.chat.type !== 'private') {
     ctx.reply('Let\'s continue in the private chat.');
   }
-
   ctx.telegram.sendMessage(ctx.message.from.id, 'Join one of the following groups', {
+    reply_markup: {
+      inline_keyboard: _.chunk(groups, 2),
+    },
+  });
+};
+
+export const partGroup = async (ctx: any) => {
+  const { username, saldos } = await api.getUser(ctx.state.username);
+
+  const groupNames = _.keys(saldos);
+
+  const groups = _.chain(groupNames)
+    .map((group) => ({
+      text: group,
+      callback_data: _.join(['part_group', username, group], ';'),
+    }))
+    .value();
+
+  ctx.telegram.sendMessage(ctx.message.from.id, 'Choose the group you wish to part', {
     reply_markup: {
       inline_keyboard: _.chunk(groups, 2),
     },
