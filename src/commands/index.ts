@@ -13,12 +13,11 @@ export default (bot: any) => {
   bot.start(start);
   bot.help(help);
 
-  bot.hears('-1', transaction.subtract);
-  bot.hears('+1', transaction.add);
+  bot.hears(/(\+|\-)[[\d.]+$/, transaction.fromText);
 
-  bot.command('/sub', transaction.subtract);
-  bot.command('/add', transaction.add);
-  bot.command('/nakki', transaction.effort);
+  bot.command('/sub', transaction.command.subtract);
+  bot.command('/add', transaction.command.add);
+  bot.command('/nakki', transaction.command.effort);
   bot.command('/saldo', saldo);
 
   bot.command('/create', user.create);
