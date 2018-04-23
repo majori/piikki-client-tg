@@ -59,6 +59,8 @@ const makeTransaction = async (ctx: any, options: TransactionOptions) => {
 
 const amountFromCommandParam = (positive: boolean) => (ctx: any) => {
   let rawAmount = _.get(ctx, 'state.command.splitArgs[0]');
+
+  // If amount was a empty string, default to 1
   if (_.isEmpty(rawAmount)) {
     rawAmount = '1';
   }

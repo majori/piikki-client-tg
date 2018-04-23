@@ -13,7 +13,7 @@ export default (bot: any) => {
   bot.start(start);
   bot.help(help);
 
-  bot.hears(/(\+|\-)[[\d.]+$/, transaction.fromText);
+  bot.hears(/^(\+|\-)[[\d.]+$/, transaction.fromText);
 
   bot.command('/sub', transaction.command.subtract);
   bot.command('/add', transaction.command.add);
