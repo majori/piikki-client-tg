@@ -7,7 +7,8 @@ export default async (ctx: any) => {
     '/login `[username]` `[password]`\n- Login to your Piikki account\n' +
     '/create `[username]` `[password]`\n - Create new Piikki account\n' +
     '/setdefault\n - Sets your default group\n' +
-    '/join\n - Join to new group',
+    '/join\n - Join to new group\n' +
+    '/part\n - Part from a group',
     { parse_mode: 'Markdown' },
   );
 };
