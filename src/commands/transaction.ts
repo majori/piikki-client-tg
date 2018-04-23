@@ -57,7 +57,7 @@ const makeTransaction = async (ctx: any, options: TransactionOptions) => {
   }
 };
 
-function amountFromCommandParam(ctx: any) {
+const amountFromCommandParam = (positive: boolean) => (ctx: any) => {
   let rawAmount = _.get(ctx, 'state.command.splitArgs[0]');
   if (_.isEmpty(rawAmount)) {
     rawAmount = '1';
@@ -67,20 +67,21 @@ function amountFromCommandParam(ctx: any) {
     .replace(',', '.')
     .toNumber()
     .round(2)
+    .multiply(positive ? 1 : -1)
     .value();
-}
+};
 
-function amountFromText(ctx: any) {
+const amountFromText = (ctx: any) => {
   const sign = ctx.message.text.slice(0, 1);
   const amount = _.toNumber(ctx.message.text.slice(1));
 
   return sign === '+' ? amount : -amount;
-}
+};
 
 export const command = {
-  add: (ctx: any) => makeTransaction(ctx, { amount: amountFromCommandParam }),
-  subtract: (ctx: any) => makeTransaction(ctx, { amount: _.negate(amountFromCommandParam) }),
-  effort: (ctx: any) => makeTransaction(ctx, { amount: amountFromCommandParam, comment: 'effort'}),
+  add: (ctx: any) => makeTransaction(ctx, { amount: amountFromCommandParam(true) }),
+  subtract: (ctx: any) => makeTransaction(ctx, { amount: amountFromCommandParam(false) }),
+  effort: (ctx: any) => makeTransaction(ctx, { amount: amountFromCommandParam(true), comment: 'effort'}),
 };
 
 export const fromText = (ctx: any) => makeTransaction(ctx, { amount: amountFromText });
