@@ -90,6 +90,11 @@ export const partGroup = async (ctx: any) => {
     }))
     .value();
 
+  if (_.isEmpty(groups)) {
+    ctx.reply('It seems that you aren\'t a member of any group!');
+    return;
+  }
+
   ctx.telegram.sendMessage(ctx.message.from.id, 'Choose the group you wish to part', {
     reply_markup: {
       inline_keyboard: _.chunk(groups, 2),

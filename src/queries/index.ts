@@ -11,7 +11,7 @@ export default (bot: any) => {
     logger.debug('Callback Query', ctx.callbackQuery);
 
     if (ctx.callbackQuery.data) {
-      const { username, saldos } = await api.getUser(ctx.state.username);
+      const { username, saldos, defaultGroup } = await api.getUser(ctx.state.username);
       const query = _.split(ctx.callbackQuery.data, ';');
       const command = _.first(query);
       const params = _.tail(query);
@@ -30,10 +30,24 @@ export default (bot: any) => {
 
         case CallbackDataTypeEnum.joinGroup:
           try {
+            const isFirstGroup = _.isEmpty(saldos);
             await api.joinGroup(username, params[0]);
             ctx.reply(
               `You are now member of the group *${params[0]}*!`,
-              { parse_mode: 'Markdown' },
+              { parse_mode: 'Markdown',
+                reply_markup: (isFirstGroup) ? undefined : {
+                  inline_keyboard: [[
+                    {
+                      text: 'Set this group as default',
+                      callback_data: _.join([CallbackDataTypeEnum.setDefaultGroup, params[0]], ';'),
+                    },
+                    {
+                      text: 'Keep the current default group',
+                      callback_data: _.join([CallbackDataTypeEnum.keepDefaultGroup, params[0]], ';'),
+                    },
+                  ]],
+                },
+              },
             );
             ctx.deleteMessage(ctx.callbackQuery.message.message_id);
           } catch (err) {
@@ -66,6 +80,22 @@ export default (bot: any) => {
           ctx.deleteMessage(ctx.callbackQuery.message.message_id);
 
           break;
+
+        case CallbackDataTypeEnum.keepDefaultGroup:
+
+          const reply = defaultGroup ?
+            `You are now member of the group *${params[0]}*, ` +
+            `but your default group is still *${defaultGroup}*!`
+          :
+            `You are now member of the group *${params[0]}*, ` +
+            `but you don\'t have a default group. You can set ` +
+            `it with /setdefault command.`;
+
+          ctx.reply(reply, { parse_mode: 'Markdown' });
+          ctx.deleteMessage(ctx.callbackQuery.message.message_id);
+
+          break;
+
       }
     }
 
