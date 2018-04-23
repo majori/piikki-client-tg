@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as api from '../api';
+import { CallbackDataTypeEnum } from '../constants/callbackEnum';
 
 export const setDefault = async (ctx: any) => {
   const { username, saldos, defaultGroup } = await api.getUser(ctx.state.username);
@@ -28,7 +29,7 @@ export const setDefault = async (ctx: any) => {
     .keys()
     .map((group) => ({
       text: group,
-      callback_data: _.join(['set_default_group', username, group], ';'),
+      callback_data: _.join([CallbackDataTypeEnum.setDefaultGroup, group], ';'),
     }))
     .value();
 
@@ -58,7 +59,7 @@ export const joinGroup = async (ctx: any) => {
     .difference(old)
     .map((group) => ({
       text: group,
-      callback_data: _.join(['join_group', username, group], ';'),
+      callback_data: _.join([CallbackDataTypeEnum.joinGroup, group], ';'),
     }))
     .value();
 
@@ -70,8 +71,31 @@ export const joinGroup = async (ctx: any) => {
   if (ctx.message.chat.type !== 'private') {
     ctx.reply('Let\'s continue in the private chat.');
   }
-
   ctx.telegram.sendMessage(ctx.message.from.id, 'Join one of the following groups', {
+    reply_markup: {
+      inline_keyboard: _.chunk(groups, 2),
+    },
+  });
+};
+
+export const partGroup = async (ctx: any) => {
+  const { username, saldos } = await api.getUser(ctx.state.username);
+
+  const groupNames = _.keys(saldos);
+
+  const groups = _.chain(groupNames)
+    .map((group) => ({
+      text: group,
+      callback_data: _.join([CallbackDataTypeEnum.partGroup, group], ';'),
+    }))
+    .value();
+
+  if (_.isEmpty(groups)) {
+    ctx.reply('It seems that you aren\'t a member of any group!');
+    return;
+  }
+
+  ctx.telegram.sendMessage(ctx.message.from.id, 'Choose the group you wish to part', {
     reply_markup: {
       inline_keyboard: _.chunk(groups, 2),
     },

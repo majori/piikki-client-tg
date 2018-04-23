@@ -4,47 +4,41 @@ import Logger from '../logger';
 
 const logger = new Logger(__dirname);
 
-const makeTransaction = async (ctx: any, positive: boolean, comment?: string) => {
+interface TransactionOptions {
+  amount: (ctx: any) => number | null;
+  comment?: string;
+}
+
+const makeTransaction = async (ctx: any, options: TransactionOptions) => {
   const user = await api.getUser(ctx.state.username);
 
   if (!user.defaultGroup) {
     ctx.reply(
       'It seems that you haven\'t any of your groups set as default group. ' +
-      'You can do it with the `/setdefault` command.',
+      'You can do it with the /setdefault command.',
       { parse_mode: 'Markdown' },
     );
     return;
   }
 
-  let rawAmount = _.get(ctx, 'state.command.splitArgs[0]');
-  if (_.isEmpty(rawAmount)) {
-    rawAmount = '1';
-  }
-
-  let amount = _.chain(rawAmount)
-    .replace(',', '.')
-    .toNumber()
-    .round(2)
-    .value();
-
-  if (Math.abs(amount) >= 1e+6) {
-    ctx.reply('The amount has to be less than one million.');
-    return;
-  }
-
-  if (amount === 0) {
-    ctx.reply('The amount can\'t be zero.');
-    return;
-  }
-
-  amount = positive ? amount : -amount;
+  const amount = options.amount(ctx);
 
   if (amount) {
+    if (Math.abs(amount) >= 1e+6) {
+      ctx.reply('The amount has to be less than one million.');
+      return;
+    }
+
+    if (amount === 0) {
+      ctx.reply('The amount can\'t be zero.');
+      return;
+    }
+
     const res = await api.makeTransaction(
       user.username,
       user.defaultGroup,
       amount,
-      comment,
+      options.comment,
     );
 
     logger.debug('Transaction', { username: user.username, group: user.defaultGroup, amount });
@@ -53,7 +47,7 @@ const makeTransaction = async (ctx: any, positive: boolean, comment?: string) =>
       {
         parse_mode: 'Markdown',
         reply_markup: (ctx.message.chat.type === 'private') ? {
-          keyboard: [[{ text: '-1'}, { text: '+1' }]],
+          keyboard: [[{ text: '-5'}, { text: '-2' }, { text: '-1'}]],
           resize_keyboard: true,
         } : undefined,
       },
@@ -63,6 +57,30 @@ const makeTransaction = async (ctx: any, positive: boolean, comment?: string) =>
   }
 };
 
-export const add = _.partial(makeTransaction, _, true);
-export const subtract = _.partial(makeTransaction, _, false);
-export const effort = _.partial(makeTransaction, _, true, 'effort');
+function amountFromCommandParam(ctx: any) {
+  let rawAmount = _.get(ctx, 'state.command.splitArgs[0]');
+  if (_.isEmpty(rawAmount)) {
+    rawAmount = '1';
+  }
+
+  return _.chain(rawAmount)
+    .replace(',', '.')
+    .toNumber()
+    .round(2)
+    .value();
+}
+
+function amountFromText(ctx: any) {
+  const sign = ctx.message.text.slice(0, 1);
+  const amount = _.toNumber(ctx.message.text.slice(1));
+
+  return sign === '+' ? amount : -amount;
+}
+
+export const command = {
+  add: (ctx: any) => makeTransaction(ctx, { amount: amountFromCommandParam }),
+  subtract: (ctx: any) => makeTransaction(ctx, { amount: _.negate(amountFromCommandParam) }),
+  effort: (ctx: any) => makeTransaction(ctx, { amount: amountFromCommandParam, comment: 'effort'}),
+};
+
+export const fromText = (ctx: any) => makeTransaction(ctx, { amount: amountFromText });
