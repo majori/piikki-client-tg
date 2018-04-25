@@ -13,7 +13,7 @@ export const setDefault = async (ctx: any) => {
         { parse_mode: 'Markdown' },
       );
 
-    // User has only one group, but the default group isn't it
+      // User has only one group, but the default group isn't it
     } else {
       const groupName = _.keys(saldos)[0];
       await api.setDefaultGroup(username, groupName);
@@ -52,14 +52,17 @@ export const setDefault = async (ctx: any) => {
 export const joinGroup = async (ctx: any) => {
   const { username, saldos } = await api.getUser(ctx.state.username);
 
-  const available = _.map(await api.getGroups(), 'name');
-  const old = _.keys(saldos);
+  const available = _.map(await api.getGroups(), (group: Group) => _.pick(group, ['name', 'private']));
+  const old = _.keys(saldos).map((group) => ({ name: group }));
 
   const groups = _.chain(available)
-    .difference(old)
+    .differenceBy(old, 'name')
     .map((group) => ({
-      text: group,
-      callback_data: _.join([CallbackDataTypeEnum.joinGroup, group], ';'),
+      text: (group.private ? '🔒 ' : '') + group.name,
+      callback_data: _.join([
+        group.private ? CallbackDataTypeEnum.joinPrivateGroup : CallbackDataTypeEnum.joinGroup,
+        group.name,
+      ], ';'),
     }))
     .value();
 

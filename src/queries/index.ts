@@ -28,6 +28,11 @@ export default (bot: any) => {
           ctx.deleteMessage(ctx.callbackQuery.message.message_id);
           break;
 
+        case CallbackDataTypeEnum.joinPrivateGroup:
+          ctx.reply('This group is private!');
+
+          break;
+
         case CallbackDataTypeEnum.joinGroup:
           try {
             const isFirstGroup = _.isEmpty(saldos);

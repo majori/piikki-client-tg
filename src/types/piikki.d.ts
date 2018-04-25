@@ -26,3 +26,8 @@ declare interface Transaction {
   saldo: number;
 }
 
+declare interface Group {
+  name: string;
+  private: boolean;
+  password?: string;
+}

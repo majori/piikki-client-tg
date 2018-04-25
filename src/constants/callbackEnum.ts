@@ -3,4 +3,5 @@ export enum CallbackDataTypeEnum {
   joinGroup = 'join_group',
   partGroup = 'part_group',
   keepDefaultGroup = 'keep_default_group',
+  joinPrivateGroup = 'join_private_group',
 }
