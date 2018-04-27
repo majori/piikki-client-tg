@@ -2,8 +2,8 @@ import * as transaction from './transaction';
 import saldo from './saldo';
 import start from './start';
 import help from './help';
-import * as user from './user';
-import * as group from './group';
+import user from './user';
+import group from './group';
 
 export default (bot: any) => {
   bot.telegram.getMe().then((info: any) => {
