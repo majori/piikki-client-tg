@@ -17,10 +17,10 @@ export const createUser = async (username: string, password: string) =>
 export const authenticateUser = async (username: string, password: string) =>
   getResult<UserAuth>(axios.post('/users/authenticate', { username, password }));
 
-export const getUserById = async (id: string) =>
+export const getUserById = async (id: number) =>
   getResult<AlternativeUserAuth>(axios.post('/users/authenticate/alternative', { key: _.toString(id), type: 30 }));
 
-export const saveIdForUser = async (username: string, id: string) =>
+export const saveIdForUser = async (username: string, id: number) =>
   getResult<AlternativeUserAuth>(
     axios.post(
       '/users/authenticate/alternative/create',

@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import * as api from '../api';
 
-export default async (ctx: any) => {
+import { Middleware } from '../types/bot';
+
+const middleware: Middleware = async (ctx) => {
   const user = await api.getUser(ctx.state.username);
 
   if (_.isEmpty(user.saldos)) {
@@ -21,3 +23,5 @@ export default async (ctx: any) => {
     { parse_mode: 'Markdown' },
   );
 };
+
+export default middleware;

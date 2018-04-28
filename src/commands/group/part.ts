@@ -1,8 +1,10 @@
 import _ from 'lodash';
 import * as api from '../../api';
 import { CallbackDataTypeEnum } from '../../constants/callbackEnum';
+import { Middleware } from 'types/bot';
+import { User } from 'types/telegraf';
 
-export default async (ctx: any) => {
+const middleware: Middleware = async (ctx) => {
   const { username, saldos } = await api.getUser(ctx.state.username);
 
   const groupNames = _.keys(saldos);
@@ -19,9 +21,13 @@ export default async (ctx: any) => {
     return;
   }
 
-  ctx.telegram.sendMessage(ctx.message.from.id, 'Choose the group you wish to part', {
+  const id = (ctx.from as User).id;
+
+  ctx.telegram.sendMessage(id, 'Choose the group you wish to part', {
     reply_markup: {
       inline_keyboard: _.chunk(groups, 2),
     },
   });
 };
+
+export default middleware;

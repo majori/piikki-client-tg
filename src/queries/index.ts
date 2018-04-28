@@ -10,45 +10,49 @@ import joinPrivateGroup from './joinPrivateGroup';
 import partGroup from './partGroup';
 
 import Logger from '../logger';
+import { Telegraf } from 'types/telegraf';
+import { Context, CallbackQuery } from 'types/bot';
 
 const logger = new Logger(__dirname);
 
-export default (bot: any) => {
-  bot.on('callback_query', async (ctx: any) => {
+export default (bot: Telegraf) => {
+  bot.on('callback_query', async (ctx: Context, next: () => Promise<any>) => {
     logger.debug('Callback Query', ctx.callbackQuery);
 
-    if (!ctx.callbackQuery.data) {
+    const callbackQuery = ctx.callbackQuery as CallbackQuery;
+
+    if (!callbackQuery.data) {
       ctx.answerCbQuery();
     }
 
-    const query = _.split(ctx.callbackQuery.data, ';');
+    const query = _.split(callbackQuery.data as string, ';');
     const command = _.first(query);
     const params = _.tail(query);
 
-    ctx.callbackQuery.params = params;
+    callbackQuery.params = params;
 
     switch (command) {
       case CallbackDataTypeEnum.setDefaultGroup:
-        return setDefaultGroup(ctx);
+        return setDefaultGroup(ctx, next);
 
       case CallbackDataTypeEnum.keepDefaultGroup:
-        return keepDefaultGroup(ctx);
+        return keepDefaultGroup(ctx, next);
 
       case CallbackDataTypeEnum.joinGroup:
-        return joinGroup(ctx);
+        return joinGroup(ctx, next);
 
       case CallbackDataTypeEnum.joinPrivateGroup:
-        return joinPrivateGroup(ctx);
+        return joinPrivateGroup(ctx, next);
 
       case CallbackDataTypeEnum.partGroup:
-        return partGroup(ctx);
+        return partGroup(ctx, next);
 
       default:
         return ctx.answerCbQuery();
     }
   });
 
-  bot.on('inline_query', (ctx: any) => {
+  bot.on('inline_query', (ctx) => {
     return ctx.answerInlineQuery([]);
   });
 };

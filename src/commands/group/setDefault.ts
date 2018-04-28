@@ -1,8 +1,10 @@
 import _ from 'lodash';
 import * as api from '../../api';
 import { CallbackDataTypeEnum } from '../../constants/callbackEnum';
+import { Middleware } from 'types/bot';
+import { IncomingMessage, User } from 'types/telegraf';
 
-export default async (ctx: any) => {
+const middleware: Middleware = async (ctx) => {
   const { username, saldos, defaultGroup } = await api.getUser(ctx.state.username);
 
   if (_.size(saldos) === 1) {
@@ -38,13 +40,18 @@ export default async (ctx: any) => {
     return;
   }
 
-  if (ctx.message.chat.type !== 'private') {
+  const id = (ctx.from as User).id;
+  const message = ctx.message as IncomingMessage;
+
+  if (message.chat.type !== 'private') {
     ctx.reply('Let\'s continue in the private chat.');
   }
 
-  ctx.telegram.sendMessage(ctx.message.from.id, 'Pick one of the following groups as a default one', {
+  ctx.telegram.sendMessage(id, 'Pick one of the following groups as a default one', {
     reply_markup: {
       inline_keyboard: _.chunk(groups, 2),
     },
   });
 };
+
+export default middleware;

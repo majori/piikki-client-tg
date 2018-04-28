@@ -1,12 +1,15 @@
 import _ from 'lodash';
 import * as api from '../api';
 import Logger from '../logger';
+import { Middleware, CallbackQuery } from 'types/bot';
+import { IncomingMessage } from 'types/telegraf';
 
 const logger = new Logger(__dirname);
 
-export default async (ctx: any) => {
+const middleware: Middleware = async (ctx) => {
+  const callbackQuery = ctx.callbackQuery as CallbackQuery;
   const { defaultGroup } = await api.getUser(ctx.state.username);
-  const group = ctx.callbackQuery.params[0];
+  const group = callbackQuery.params[0];
 
   const reply = defaultGroup ?
     `You are now member of the group *${group}*, ` +
@@ -17,7 +20,9 @@ export default async (ctx: any) => {
     `it with /setdefault command.`;
 
   ctx.reply(reply, { parse_mode: 'Markdown' });
-  ctx.deleteMessage(ctx.callbackQuery.message.message_id);
+  ctx.deleteMessage((callbackQuery.message as IncomingMessage).message_id);
 
   return ctx.answerCbQuery();
 };
+
+export default middleware;

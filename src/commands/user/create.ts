@@ -1,12 +1,15 @@
 import _ from 'lodash';
 import * as api from '../../api';
 import { sessions } from '../../middlewares/auth';
+import { Middleware } from '../../types/bot';
+import { User, IncomingMessage } from '../../types/telegraf';
 
-export default async (ctx: any) => {
+const middleware: Middleware = async (ctx) => {
   const username = _.toString(ctx.state.command.splitArgs[0]);
   const password = _.toString(ctx.state.command.splitArgs[1]);
 
-  const user = await api.getUserById(ctx.from.id);
+  const id = (ctx.from as User).id;
+  const user = await api.getUserById(id);
   if (user.authenticated) {
     ctx.reply(
       `You can't create a new user, since this Telegram account is already registered to user *${user.username}*.`,
@@ -33,8 +36,8 @@ export default async (ctx: any) => {
 
     try {
       await api.createUser(username, password);
-      await api.saveIdForUser(username, ctx.from.id);
-      sessions[ctx.from.id] = username;
+      await api.saveIdForUser(username, id);
+      sessions[id] = username;
 
       ctx.reply(
         `You've successfully created a new account called *${username}*. ` +
@@ -61,7 +64,7 @@ export default async (ctx: any) => {
     }
   } else {
     let msg = 'Please use following format: /create `[username]` `[password]`.';
-    if (ctx.message.chat.type !== 'private') {
+    if ((ctx.message as IncomingMessage).chat.type !== 'private') {
       msg += 'I\'d prefer to do this in the private chat.';
     }
 
@@ -71,3 +74,5 @@ export default async (ctx: any) => {
     );
   }
 };
+
+export default middleware;
