@@ -20,16 +20,16 @@ const middleware: Middleware = async (ctx) => {
       `You are now member of the group *${group}*!`,
       { parse_mode: 'Markdown',
         reply_markup: isFirstGroup ? undefined : {
-          inline_keyboard: [[
-            {
+          inline_keyboard: [
+            [{
               text: 'Set this group as default',
               callback_data: _.join([CallbackDataTypeEnum.setDefaultGroup, group], ';'),
-            },
-            {
+            }],
+            [{
               text: 'Keep the current default group',
               callback_data: _.join([CallbackDataTypeEnum.keepDefaultGroup, group], ';'),
-            },
-          ]],
+            }],
+          ],
         },
       },
     );

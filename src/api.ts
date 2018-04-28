@@ -40,5 +40,8 @@ export const getGroups = async () =>
 export const joinGroup = async (username: string, groupName: string) =>
   getResult<any>(axios.post(`/groups/${groupName}/addMember`, { username }));
 
+export const joinPrivateGroup = async (username: string, password: string, groupName: string) =>
+  getResult<any>(axios.post(`/groups/${groupName}/addMember`, { username, password }));
+
 export const partGroup = async (username: string, groupName: string) =>
   getResult<any>(axios.delete(`/groups/${groupName}/removeMember`, { data: { username }}));

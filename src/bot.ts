@@ -5,6 +5,7 @@ import config from './config';
 import * as api from './api';
 import commands from './commands';
 import queries from './queries';
+import stages from './stages';
 import middlewares from './middlewares';
 import { Telegraf } from './types/telegraf';
 
@@ -16,6 +17,9 @@ export default async (bot: Telegraf) => {
 
   // Register middlewares
   middlewares(bot);
+
+  // Register stages
+  stages(bot);
 
   // Register commands
   commands(bot);
