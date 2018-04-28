@@ -8,10 +8,10 @@
   },
   "scripts": {
     "start": "node build/index.js",
-    "build": "tsc -p ./tsconfig.json --listEmittedFiles",
+    "build": "tsc -p tsconfig.json --listEmittedFiles",
     "dev": "nodemon --inspect -r dotenv/config -r ts-node/register src/index.ts",
     "test": "npm run lint && mocha -p ./test/tsconfig.json test/**/*_spec.ts",
-    "lint": "tslint --project tsconfig.json",
+    "lint": "tsc -p tsconfig.json --noEmit && tslint -p tsconfig.json",
     "postinstall": "npm run build"
   },
   "repository": {
