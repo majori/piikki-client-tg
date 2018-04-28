@@ -17,3 +17,12 @@ export async function createTestableBot() {
 
   return createBot(bot);
 }
+
+export function contextBuilder() {
+  return {
+    state: {
+      username: 'user',
+    },
+    reply: sinon.spy(),
+  };
+}

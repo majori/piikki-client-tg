@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as api from '../api';
+import messages from '../constants/messages';
 
 import { Middleware } from '../types/bot';
 
@@ -7,7 +8,7 @@ const middleware: Middleware = async (ctx) => {
   const user = await api.getUser(ctx.state.username);
 
   if (_.isEmpty(user.saldos)) {
-    ctx.reply('You are not a member in any group.');
+    ctx.reply(messages.notAMemberInAnyGroup);
     return;
   }
 

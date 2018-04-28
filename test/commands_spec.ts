@@ -1,18 +1,35 @@
 import 'mocha';
+import sinon from 'sinon';
 import { expect } from 'chai';
+import { contextBuilder } from './helper';
+import * as api from '../src/api';
+import messages from '../src/constants/messages';
 
-import { createTestableBot, botInfo } from './helper';
-import { Telegraf } from '../src/types/telegraf';
+import saldo from '../src/commands/saldo';
 
-describe('Commmands', () => {
-  let bot: any;
+describe('Commands', () => {
+  let stub: sinon.SinonStub;
 
-  before(async () => {
-    bot = await createTestableBot();
+  afterEach(async () => {
+    stub.resetHistory();
   });
 
-  it('bot will fetch it\'s name with getMe()', () => {
-    expect(bot.telegram.getMe.called).to.be.true; // tslint:disable-line
-    expect(bot.options).to.have.property('username', botInfo.username);
+  const setUserStub = (body: any) => {
+    stub = sinon.stub(api, 'getUser').resolves(body);
+  };
+
+  describe('Saldo', () => {
+    it('replys error message if user isn\'t member in any group', async () => {
+      setUserStub({
+        username: 'asd',
+        saldos: {},
+        defaultGroup: 'group1',
+      });
+
+      const context = contextBuilder();
+
+      await saldo(context as any);
+      expect(context.reply.lastCall.calledWith(messages.notAMemberInAnyGroup)).to.be.true;
+    });
   });
 });

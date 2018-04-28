@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import * as api from '../api';
-import { Context, Middleware } from 'types/bot';
+import { Middleware } from 'types/bot';
 import { IncomingMessage } from 'types/telegraf';
 
 export const sessions: { [id: string]: string } = {};
 
-const middleware: Middleware = async (ctx: Context, next: () => Promise<any>) => {
+const middleware: Middleware = async (ctx, next: any) => {
   if (_.includes(['start', 'help', 'login', 'create'], _.get(ctx, 'state.command.command'))) {
     return next();
   }

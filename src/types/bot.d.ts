@@ -25,4 +25,4 @@ export interface Context extends TelegrafContext<State> {
   callbackQuery?: CallbackQuery;
 }
 
-export type Middleware = (ctx: Context, next: () => Promise<any>) => Promise<any>;
+export type Middleware = (ctx: Context, next?: () => Promise<any>) => Promise<any>;
