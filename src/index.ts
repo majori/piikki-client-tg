@@ -1,36 +1,20 @@
-import Telegraf from 'telegraf';
-import _ from 'lodash';
-
 import config from './config';
-import * as api from './api';
+import createBot from './bot';
+import Telegraf from 'telegraf';
 
-import commands from './commands';
-import queries from './queries';
-import middlewares from './middlewares';
+async function start() {
+  const bot = await createBot(new Telegraf(config.tg.token));
 
-const bot = new Telegraf(config.tg.token);
+  // Setup webhook if production
+  if (config.env.prod) {
+    bot.telegram.setWebhook(`${config.tg.webhook}/bot${config.tg.token}`);
+    bot.startWebhook(`/bot${config.tg.token}`, {}, config.tg.port);
 
-// Apply telegram message logger if developing
-if (config.env.dev) {
-  bot.use(Telegraf.log());
+  // Do polling in development
+  } else {
+    bot.telegram.deleteWebhook();
+    bot.startPolling();
+  }
 }
 
-// Register middlewares
-middlewares(bot);
-
-// Register commands
-commands(bot);
-
-// Register responders for inline and callback queries
-queries(bot);
-
-// Setup webhook if production
-if (config.env.prod) {
-  bot.telegram.setWebhook(`${config.tg.webhook}/bot${config.tg.token}`);
-  bot.startWebhook(`/bot${config.tg.token}`, null, config.tg.port);
-
-// Do polling in development
-} else {
-  bot.telegram.deleteWebhook();
-  bot.startPolling();
-}
+start();

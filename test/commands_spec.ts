@@ -1,5 +1,18 @@
-describe('Test', () => {
-  it('Sample test case', () => {
-    return;
+import 'mocha';
+import { expect } from 'chai';
+
+import { createTestableBot, botInfo } from './helper';
+import { Telegraf } from '../src/types/telegraf';
+
+describe('Commmands', () => {
+  let bot: any;
+
+  before(async () => {
+    bot = await createTestableBot();
+  });
+
+  it('bot will fetch it\'s name with getMe()', () => {
+    expect(bot.telegram.getMe.called).to.be.true; // tslint:disable-line
+    expect(bot.options).to.have.property('username', botInfo.username);
   });
 });

@@ -11,6 +11,7 @@
     "build": "tsc -p tsconfig.json --listEmittedFiles",
     "dev": "nodemon --inspect -r dotenv/config -r ts-node/register src/index.ts",
     "test": "npm run lint && mocha -p ./test/tsconfig.json test/**/*_spec.ts",
+    "test:watch": "mocha -p ./test/tsconfig.json -w --inspect test/**/*_spec.ts",
     "lint": "tsc -p tsconfig.json --noEmit && tslint -p tsconfig.json",
     "postinstall": "npm run build"
   },

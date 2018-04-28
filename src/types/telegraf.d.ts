@@ -2198,6 +2198,9 @@ export class Telegram {
    * @returns a Message on success
    */
   sendVideo(chatId: number | string, video: InputFile, extra?: ExtraVideo): Promise<MessageVideo>
+
+  setWebhook(webhookPath: string): any;
+  deleteWebhook(): any;
 }
 
 

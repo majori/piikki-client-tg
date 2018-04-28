@@ -2,3 +2,4 @@
 --project test/tsconfig.json
 --require test/common.ts
 --no-timeouts
+--watch-extensions ts
