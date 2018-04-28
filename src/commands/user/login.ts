@@ -46,3 +46,5 @@ const middleware: Middleware = async (ctx) => {
     );
   }
 };
+
+export default middleware;
