@@ -13,6 +13,7 @@
     "test": "npm run lint && mocha test/**/*_spec.ts",
     "test:watch": "mocha -w --inspect test/**/*_spec.ts",
     "lint": "tsc -p tsconfig.json --noEmit && tslint -p tsconfig.json",
+    "migrate": "knex migrate:latest",
     "postinstall": "npm run build"
   },
   "repository": {
@@ -30,7 +31,9 @@
   "homepage": "https://github.com/majori/piikki-client-tg#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "knex": "^0.14.6",
     "lodash": "^4.17.5",
+    "pg": "^7.4.1",
     "telegraf": "^3.20.0",
     "telegraf-command-parts": "^1.0.3",
     "winston": "^2.4.1"
