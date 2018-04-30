@@ -7,7 +7,7 @@ import joinPrivateGroup from './joinPrivateGroup';
 export default (bot: Telegraf) => {
 
   const stage = new Stage();
-  stage.register(joinPrivateGroup());
+  stage.register(joinPrivateGroup);
 
   bot.use(session());
   bot.use(stage.middleware());
