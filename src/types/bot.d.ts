@@ -3,7 +3,6 @@ import {
   Middleware as TelegrafMiddleware,
   CallbackQuery as TelegrafCallbackQuery,
 } from './telegraf';
-import { AsyncResource } from 'async_hooks';
 
 export interface CommandParts {
   text: string;
@@ -22,14 +21,22 @@ interface CallbackQuery extends TelegrafCallbackQuery {
   params?: any;
 }
 
+interface SceneObject {
+  state: {
+    group: string;
+    attemps: number;
+  };
+  leave(): any;
+}
+
 export interface Context extends TelegrafContext<State> {
   callbackQuery?: CallbackQuery;
-  scene?: any;
+  scene?: SceneObject;
 }
 
 export type Middleware = (ctx: Context, next?: () => Promise<any>) => Promise<any>;
 
-export interface Act {
+export interface Scene {
   enter(ctx: any): any;
   on(command: string, ctx: any): any;
 }
