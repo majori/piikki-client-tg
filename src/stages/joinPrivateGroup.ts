@@ -6,15 +6,14 @@ import { IncomingMessage } from 'types/telegraf';
 import Scene from 'telegraf/scenes/base';
 import { Scene as TelegrafScene } from 'types/bot';
 
-const act = new Scene('joinPrivateGroup') as TelegrafScene;
+const scene = new Scene('joinPrivateGroup') as TelegrafScene;
 
-act.enter((ctx: Context) => {
+scene.enter((ctx: Context) => {
   const callbackQuery = ctx.callbackQuery as CallbackQuery;
   const group = callbackQuery.params[0];
 
-  const scene = ctx.scene as SceneObject;
-  scene.state.group = group;
-  scene.state.attemps = 1;
+  ctx.scene!.state.group = group;
+  ctx.scene!.state.attemps = 1;
 
   ctx.reply(
     `Please send the password of the group *${group}*.`,
@@ -24,12 +23,11 @@ act.enter((ctx: Context) => {
   return ctx.answerCbQuery();
 });
 
-act.on('message', async (ctx: Context) => {
+scene.on('message', async (ctx: Context) => {
   const { username, saldos } = await api.getUser(ctx.state.username);
-  const scene = ctx.scene as SceneObject;
   const message = ctx.message as IncomingMessage;
 
-  const { group, attemps } = scene.state;
+  const { group, attemps } = ctx.scene!.state;
   const password = message.text || '';
   const isFirstGroup = _.isEmpty(saldos);
 
@@ -53,7 +51,7 @@ act.on('message', async (ctx: Context) => {
       },
     );
   } catch (err) {
-    scene.state.attemps = attemps + 1;
+    ctx.scene!.state.attemps = attemps + 1;
 
     switch (attemps) {
       case 1:
@@ -68,7 +66,7 @@ act.on('message', async (ctx: Context) => {
     }
   }
 
-  scene.leave();
+  ctx.scene!.leave();
 });
 
-export default act;
+export default scene;

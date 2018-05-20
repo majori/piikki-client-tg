@@ -21,7 +21,7 @@ describe('Commands', () => {
   describe('Saldo', () => {
     it('replys error message if user isn\'t member in any group', async () => {
       setUserStub({
-        username: 'asd',
+        username: 'user',
         saldos: {},
         defaultGroup: 'group1',
       });

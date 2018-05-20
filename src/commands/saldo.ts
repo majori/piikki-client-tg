@@ -4,7 +4,7 @@ import messages from '../constants/messages';
 
 import { Middleware } from '../types/bot';
 
-const middleware: Middleware = async (ctx) => {
+const command: Middleware = async (ctx) => {
   const user = await api.getUser(ctx.state.username);
 
   if (_.isEmpty(user.saldos)) {
@@ -25,4 +25,4 @@ const middleware: Middleware = async (ctx) => {
   );
 };
 
-export default middleware;
+export default command;

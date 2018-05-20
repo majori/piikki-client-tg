@@ -1,7 +1,7 @@
 import { Middleware } from '../types/bot';
 import { IncomingMessage } from '../types/telegraf';
 
-const middleware: Middleware = async (ctx) => {
+const command: Middleware = async (ctx) => {
   let msg = 'Hello there! You can start by logging into your account with ' +
     '/login `[username]` `[password]` or you can create a new account with ' +
     '/create `[username]` `[password]` command.';
@@ -16,4 +16,4 @@ const middleware: Middleware = async (ctx) => {
   );
 };
 
-export default middleware;
+export default command;

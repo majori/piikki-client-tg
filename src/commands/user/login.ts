@@ -4,7 +4,7 @@ import { sessions } from '../../middlewares/auth';
 import { Middleware } from '../../types/bot';
 import { User, IncomingMessage } from '../../types/telegraf';
 
-const middleware: Middleware = async (ctx) => {
+const command: Middleware = async (ctx) => {
   const username = _.toString(ctx.state.command.splitArgs[0]);
   const password = _.toString(ctx.state.command.splitArgs[1]);
 
@@ -47,4 +47,4 @@ const middleware: Middleware = async (ctx) => {
   }
 };
 
-export default middleware;
+export default command;

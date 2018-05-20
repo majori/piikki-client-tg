@@ -83,7 +83,7 @@ const amountFromText = (ctx: Context) => {
   return sign === '+' ? amount : -amount;
 };
 
-export const command: { [key: string]: Middleware } = {
+export const commands: { [key: string]: Middleware } = {
   add: (ctx) => makeTransaction(ctx, { amount: amountFromCommandParam(true) }),
   subtract: (ctx) => makeTransaction(ctx, { amount: amountFromCommandParam(false) }),
   effort: (ctx) => makeTransaction(ctx, { amount: amountFromCommandParam(true), comment: 'effort'}),

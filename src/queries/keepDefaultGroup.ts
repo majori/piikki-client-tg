@@ -6,7 +6,7 @@ import { IncomingMessage } from 'types/telegraf';
 
 const logger = new Logger(__dirname);
 
-const middleware: Middleware = async (ctx) => {
+const queryHandler: Middleware = async (ctx) => {
   const callbackQuery = ctx.callbackQuery as CallbackQuery;
   const { defaultGroup } = await api.getUser(ctx.state.username);
   const group = callbackQuery.params[0];
@@ -25,4 +25,4 @@ const middleware: Middleware = async (ctx) => {
   return ctx.answerCbQuery();
 };
 
-export default middleware;
+export default queryHandler;

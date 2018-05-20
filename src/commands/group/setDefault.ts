@@ -4,7 +4,7 @@ import { CallbackDataTypeEnum } from '../../constants/callbackEnum';
 import { Middleware } from 'types/bot';
 import { IncomingMessage, User } from 'types/telegraf';
 
-const middleware: Middleware = async (ctx) => {
+const command: Middleware = async (ctx) => {
   const { username, saldos, defaultGroup } = await api.getUser(ctx.state.username);
 
   if (_.size(saldos) === 1) {
@@ -54,4 +54,4 @@ const middleware: Middleware = async (ctx) => {
   });
 };
 
-export default middleware;
+export default command;

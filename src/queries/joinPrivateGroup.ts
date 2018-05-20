@@ -5,8 +5,8 @@ import { Middleware } from 'types/bot';
 
 const logger = new Logger(__dirname);
 
-const middleware: Middleware = async (ctx: any) => {
+const queryHandler: Middleware = async (ctx: any) => {
   return ctx.scene.enter('joinPrivateGroup');
 };
 
-export default middleware;
+export default queryHandler;

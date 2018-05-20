@@ -16,9 +16,9 @@ export default (bot: Telegraf) => {
 
   bot.hears(/^(\+|\-)[[\d.]+$/, transaction.fromText);
 
-  bot.command('/sub', transaction.command.subtract);
-  bot.command('/add', transaction.command.add);
-  bot.command('/nakki', transaction.command.effort);
+  bot.command('/sub', transaction.commands.subtract);
+  bot.command('/add', transaction.commands.add);
+  bot.command('/nakki', transaction.commands.effort);
   bot.command('/saldo', saldo);
 
   bot.command('/create', user.create);
