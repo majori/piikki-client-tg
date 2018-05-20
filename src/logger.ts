@@ -5,15 +5,13 @@ import config from './config';
 
 export class Logger extends Winston {
 
-  constructor(filePath: string) {
+  constructor(filePath?: string) {
     super();
-
-    const fileName = path.basename(filePath);
 
     this.configure({
       transports: [
         new transports.Console({
-          label: fileName ? fileName : 'piikki-client-tg',
+          label: filePath ? path.basename(filePath) : require('../package.json').name,
           timestamp: true,
           colorize: true,
         }),
