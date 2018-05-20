@@ -4,7 +4,7 @@ import Logger from '../logger';
 import { Middleware, CallbackQuery } from 'types/bot';
 import { IncomingMessage } from 'types/telegraf';
 
-const logger = new Logger(__dirname);
+const logger = new Logger(__filename);
 
 const queryHandler: Middleware = async (ctx) => {
   const callbackQuery = ctx.callbackQuery as CallbackQuery;

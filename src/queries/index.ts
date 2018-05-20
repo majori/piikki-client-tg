@@ -13,7 +13,7 @@ import Logger from '../logger';
 import { Telegraf } from 'types/telegraf';
 import { Context, CallbackQuery } from 'types/bot';
 
-const logger = new Logger(__dirname);
+const logger = new Logger(__filename);
 
 export default (bot: Telegraf) => {
   bot.on('callback_query', async (ctx: Context, next: () => Promise<any>) => {

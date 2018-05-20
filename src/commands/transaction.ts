@@ -4,7 +4,7 @@ import Logger from '../logger';
 import { Context, Middleware } from '../types/bot';
 import { IncomingMessage } from '../types/telegraf';
 
-const logger = new Logger(__dirname);
+const logger = new Logger(__filename);
 
 interface TransactionOptions {
   amount: (ctx: any) => number | null;

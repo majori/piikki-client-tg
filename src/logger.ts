@@ -13,7 +13,7 @@ export class Logger extends Winston {
     this.configure({
       transports: [
         new transports.Console({
-          label: `piikki-client-tg${fileName ? `-${fileName}` : ''}`,
+          label: fileName ? fileName : 'piikki-client-tg',
           timestamp: true,
           colorize: true,
         }),
