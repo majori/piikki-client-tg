@@ -1,4 +1,6 @@
-exports.up = function(knex, Promise) {
+import Knex from 'knex';
+
+export const up = async (knex: Knex) => {
   return knex.schema.createTable('groups', table => {
     table.integer('tg_group_id')
       .primary();
@@ -9,6 +11,6 @@ exports.up = function(knex, Promise) {
   });
 };
 
-exports.down = function(knex, Promise) {
+export const down = (knex: Knex) => {
   return knex.schema.dropTable('groups');
 };

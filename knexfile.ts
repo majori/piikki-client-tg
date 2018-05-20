@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   development: {
     client: 'pg',
     connection: process.env.DATABASE_URL || {
@@ -6,14 +6,14 @@ module.exports = {
       port: 5001,
       database: 'postgres',
       user: 'postgres',
-      password: 'password12!'
+      password: 'password12!',
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      tableName: 'knex_migrations'
+      tableName: 'knex_migrations',
     },
   },
 
@@ -22,10 +22,10 @@ module.exports = {
     connection: process.env.DATABASE_URL,
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      tableName: 'knex_migrations'
+      tableName: 'knex_migrations',
     },
   },
 };
