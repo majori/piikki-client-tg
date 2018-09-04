@@ -1,15 +1,17 @@
 import _ from 'lodash';
 import * as api from '../api';
 import Logger from '../logger';
+import { Context, Middleware } from '../types/bot';
+import { IncomingMessage } from '../types/telegraf';
 
-const logger = new Logger(__dirname);
+const logger = new Logger(__filename);
 
 interface TransactionOptions {
   amount: (ctx: any) => number | null;
   comment?: string;
 }
 
-const makeTransaction = async (ctx: any, options: TransactionOptions) => {
+const makeTransaction = async (ctx: Context, options: TransactionOptions) => {
   const user = await api.getUser(ctx.state.username);
 
   if (!user.defaultGroup) {
@@ -46,7 +48,7 @@ const makeTransaction = async (ctx: any, options: TransactionOptions) => {
       `Your new saldo in group *${user.defaultGroup}* is *${res.saldo}*.`,
       {
         parse_mode: 'Markdown',
-        reply_markup: (ctx.message.chat.type === 'private') ? {
+        reply_markup: ((ctx.message as IncomingMessage).chat.type === 'private') ? {
           keyboard: [[{ text: '-5'}, { text: '-2' }, { text: '-1'}]],
           resize_keyboard: true,
         } : undefined,
@@ -57,7 +59,7 @@ const makeTransaction = async (ctx: any, options: TransactionOptions) => {
   }
 };
 
-const amountFromCommandParam = (positive: boolean) => (ctx: any) => {
+const amountFromCommandParam = (positive: boolean) => (ctx: Context) => {
   let rawAmount = _.get(ctx, 'state.command.splitArgs[0]');
 
   // If amount was a empty string, default to 1
@@ -73,17 +75,18 @@ const amountFromCommandParam = (positive: boolean) => (ctx: any) => {
     .value();
 };
 
-const amountFromText = (ctx: any) => {
-  const sign = ctx.message.text.slice(0, 1);
-  const amount = _.toNumber(ctx.message.text.slice(1));
+const amountFromText = (ctx: Context) => {
+  const text = (ctx.message as IncomingMessage).text as string;
+  const sign = text.slice(0, 1);
+  const amount = _.toNumber(text.slice(1));
 
   return sign === '+' ? amount : -amount;
 };
 
-export const command = {
-  add: (ctx: any) => makeTransaction(ctx, { amount: amountFromCommandParam(true) }),
-  subtract: (ctx: any) => makeTransaction(ctx, { amount: amountFromCommandParam(false) }),
-  effort: (ctx: any) => makeTransaction(ctx, { amount: amountFromCommandParam(true), comment: 'effort'}),
+export const commands: { [key: string]: Middleware } = {
+  add: (ctx) => makeTransaction(ctx, { amount: amountFromCommandParam(true) }),
+  subtract: (ctx) => makeTransaction(ctx, { amount: amountFromCommandParam(false) }),
+  effort: (ctx) => makeTransaction(ctx, { amount: amountFromCommandParam(true), comment: 'effort'}),
 };
 
-export const fromText = (ctx: any) => makeTransaction(ctx, { amount: amountFromText });
+export const fromText: Middleware = (ctx) => makeTransaction(ctx, { amount: amountFromText });

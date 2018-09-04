@@ -2,11 +2,12 @@ import * as transaction from './transaction';
 import saldo from './saldo';
 import start from './start';
 import help from './help';
-import * as user from './user';
-import * as group from './group';
+import user from './user';
+import group from './group';
+import { Telegraf } from '../types/telegraf';
 
-export default (bot: any) => {
-  bot.telegram.getMe().then((info: any) => {
+export default (bot: Telegraf) => {
+  bot.telegram.getMe().then((info) => {
     bot.options.username = info.username;
   });
 
@@ -15,9 +16,9 @@ export default (bot: any) => {
 
   bot.hears(/^(\+|\-)[[\d.]+$/, transaction.fromText);
 
-  bot.command('/sub', transaction.command.subtract);
-  bot.command('/add', transaction.command.add);
-  bot.command('/nakki', transaction.command.effort);
+  bot.command('/sub', transaction.commands.subtract);
+  bot.command('/add', transaction.commands.add);
+  bot.command('/nakki', transaction.commands.effort);
   bot.command('/saldo', saldo);
 
   bot.command('/create', user.create);

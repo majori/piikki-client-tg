@@ -1,4 +1,6 @@
-export default async (ctx: any) => {
+import { Middleware } from '../types/bot';
+
+const command: Middleware = async (ctx) => {
   ctx.reply(
     '/add `[amount]`\n - Adds saldo to your default group\n' +
     '/sub `[amount]`\n - Subtracts saldo from your default group\n' +
@@ -12,3 +14,5 @@ export default async (ctx: any) => {
     { parse_mode: 'Markdown' },
   );
 };
+
+export default command;

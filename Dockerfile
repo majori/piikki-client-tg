@@ -1,15 +1,15 @@
-FROM node:8
+FROM node:carbon-alpine
 
-RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
+COPY package*.json ./
 
-COPY package.json /usr/src/app/
 RUN npm install
 
-ENV NODE_ENV production
-
-COPY . /usr/src/app
+COPY . .
 RUN npm run build
+
+RUN npm prune --production
+RUN npm cache clean --force
 
 EXPOSE 5000
 

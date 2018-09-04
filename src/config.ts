@@ -9,7 +9,7 @@ export default {
   tg: {
     token: process.env.TELEGRAM_TOKEN,
     webhook: process.env.WEBHOOK_DOMAIN,
-    port: process.env.PORT || 5000,
+    port: parseInt(process.env.PORT as string, 10) || 5000,
   },
   piikki: {
     domain: process.env.PIIKKI_DOMAIN,

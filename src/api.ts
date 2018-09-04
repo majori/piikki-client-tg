@@ -17,10 +17,10 @@ export const createUser = async (username: string, password: string) =>
 export const authenticateUser = async (username: string, password: string) =>
   getResult<UserAuth>(axios.post('/users/authenticate', { username, password }));
 
-export const getUserById = async (id: string) =>
+export const getUserById = async (id: number) =>
   getResult<AlternativeUserAuth>(axios.post('/users/authenticate/alternative', { key: _.toString(id), type: 30 }));
 
-export const saveIdForUser = async (username: string, id: string) =>
+export const saveIdForUser = async (username: string, id: number) =>
   getResult<AlternativeUserAuth>(
     axios.post(
       '/users/authenticate/alternative/create',
@@ -35,10 +35,13 @@ export const setDefaultGroup = async (username: string, groupName: string) =>
   getResult<any>(axios.post(`/users/${username}/defaultGroup`, { groupName }));
 
 export const getGroups = async () =>
-  getResult<any>(axios.get('/groups'));
+  getResult<any>(axios.get('/groups', { params: { all: true } }));
 
 export const joinGroup = async (username: string, groupName: string) =>
   getResult<any>(axios.post(`/groups/${groupName}/addMember`, { username }));
+
+export const joinPrivateGroup = async (username: string, password: string, groupName: string) =>
+  getResult<any>(axios.post(`/groups/${groupName}/addMember`, { username, password }));
 
 export const partGroup = async (username: string, groupName: string) =>
   getResult<any>(axios.delete(`/groups/${groupName}/removeMember`, { data: { username }}));
