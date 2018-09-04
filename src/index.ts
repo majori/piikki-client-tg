@@ -12,7 +12,7 @@ async function start() {
   if (config.env.prod) {
     const webhook = `${config.tg.webhook}/bot${config.tg.token}`;
     bot.telegram.setWebhook(webhook);
-    bot.startWebhook(`/bot${config.tg.token}`, {}, config.tg.port);
+    bot.startWebhook(`/bot${config.tg.token}`, null as any, config.tg.port);
     logger.info(`Webhook listening at ${webhook}`);
 
   // Do polling in development
