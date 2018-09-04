@@ -35,7 +35,7 @@
     "knex": "^0.14.6",
     "lodash": "^4.17.10",
     "pg": "^7.4.3",
-    "telegraf": "^3.21.1",
+    "telegraf": "^3.23.0",
     "telegraf-command-parts": "^1.0.3",
     "ts-node": "^5.0.1",
     "typescript": "^2.8.3",
