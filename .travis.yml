@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - "8"
 
-notifications:
-  email:
-  - antti.kivimaki@futurice.com
+after_success:
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+- export REPO=$DOCKER_USERNAME/piikki-client-tg
+- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+- docker build -t $REPO:$TAG .
+- docker push $REPO
