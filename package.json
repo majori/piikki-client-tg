@@ -39,22 +39,22 @@
     "pg": "^7.18.2",
     "telegraf": "^3.38.0",
     "telegraf-command-parts": "^1.0.3",
-    "ts-node": "^5.0.1",
-    "typescript": "^2.9.2",
     "winston": "^2.4.5"
   },
   "devDependencies": {
     "@types/chai": "^4.2.12",
-    "@types/knex": "^0.14.26",
+    "@types/knex": "^0.16.1",
     "@types/lodash": "^4.14.159",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^9.6.57",
+    "@types/node": "^14.0.27",
     "@types/sinon": "^4.3.3",
     "chai": "^4.2.0",
     "dotenv": "^5.0.1",
     "mocha": "^8.1.1",
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
-    "sinon": "^4.5.0"
+    "sinon": "^4.5.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
   }
 }
