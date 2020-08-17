@@ -1,8 +1,6 @@
-import 'mocha';
 import { expect } from 'chai';
 
 import { createTestableBot, botInfo } from './helper';
-import { Telegraf } from '../src/types/telegraf';
 
 describe('Bot', () => {
   let bot: any;

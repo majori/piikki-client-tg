@@ -1,6 +1,5 @@
 import sinon from 'sinon';
 import TelegrafBot from 'telegraf';
-import { Telegraf } from '../src/types/telegraf';
 import createBot from '../src/bot';
 
 export const botInfo = {
@@ -15,7 +14,7 @@ export async function createTestableBot() {
 
   sinon.stub(bot.telegram, 'getMe').resolves(botInfo);
 
-  return createBot(bot);
+  return createBot(bot as any);
 }
 
 export function contextBuilder() {

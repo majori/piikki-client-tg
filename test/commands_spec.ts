@@ -1,4 +1,3 @@
-import 'mocha';
 import sinon from 'sinon';
 import { expect } from 'chai';
 import { contextBuilder } from './helper';
