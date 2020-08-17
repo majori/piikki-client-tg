@@ -1,8 +1,4 @@
-import {
-  ContextMessageUpdate as TelegrafContext,
-  Middleware as TelegrafMiddleware,
-  CallbackQuery as TelegrafCallbackQuery,
-} from './telegraf';
+import * as Telegraf from 'telegraf';
 
 export interface CommandParts {
   text: string;
@@ -17,10 +13,6 @@ export interface State {
   command: CommandParts;
 }
 
-interface CallbackQuery extends TelegrafCallbackQuery {
-  params?: any;
-}
-
 interface SceneObject {
   state: {
     group: string;
@@ -29,8 +21,7 @@ interface SceneObject {
   leave(): any;
 }
 
-export interface Context extends TelegrafContext<State> {
-  callbackQuery?: CallbackQuery;
+export interface Context extends Telegraf.Context {
   scene?: SceneObject;
 }
 

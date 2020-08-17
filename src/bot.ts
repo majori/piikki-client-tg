@@ -1,19 +1,14 @@
 import _ from 'lodash';
-import { log } from 'telegraf';
+import type { Telegraf } from 'telegraf';
+import type { Context } from './types/bot';
 
-import config from './config';
-import * as api from './api';
 import commands from './commands';
 import queries from './queries';
 import stages from './stages';
 import middlewares from './middlewares';
-import { Telegraf } from './types/telegraf';
 
-export default async (bot: Telegraf) => {
+export default async (bot: Telegraf<Context>) => {
   // Apply telegram message logger if developing
-  if (config.env.dev) {
-    bot.use(log());
-  }
 
   // Register middlewares
   middlewares(bot);
