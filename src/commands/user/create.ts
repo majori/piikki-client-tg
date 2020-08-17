@@ -41,19 +41,22 @@ const command: Middleware = async (ctx) => {
 
       ctx.reply(
         `You've successfully created a new account called *${username}*. ` +
-        'Now you can join groups with command `/join`.\n\n' +
-        '*NOTE*: You should delete the previous message so your password ' +
-        'won\'t get into wrong hands.',
+          'Now you can join groups with command `/join`.\n\n' +
+          '*NOTE*: You should delete the previous message so your password ' +
+          "won't get into wrong hands.",
         { parse_mode: 'Markdown' },
       );
-
     } catch (err) {
-      if (_.includes(_.get(err, 'response.data.error.message'), 'already exists')) {
+      if (
+        _.includes(_.get(err, 'response.data.error.message'), 'already exists')
+      ) {
         ctx.reply(
           `Username *${username}* already exists. Please choose another one.`,
           { parse_mode: 'Markdown' },
         );
-      } else if (_.includes(_.get(err, 'response.data.error.message'), 'alpha-numeric')) {
+      } else if (
+        _.includes(_.get(err, 'response.data.error.message'), 'alpha-numeric')
+      ) {
         ctx.reply(
           'Username must only contain alpha-numeric and underscore characters. Please choose another one.',
           { parse_mode: 'Markdown' },
@@ -65,13 +68,10 @@ const command: Middleware = async (ctx) => {
   } else {
     let msg = 'Please use following format: /create `[username]` `[password]`.';
     if ((ctx.message as IncomingMessage).chat.type !== 'private') {
-      msg += 'I\'d prefer to do this in the private chat.';
+      msg += "I'd prefer to do this in the private chat.";
     }
 
-    ctx.reply(
-       msg,
-      { parse_mode: 'Markdown' },
-    );
+    ctx.reply(msg, { parse_mode: 'Markdown' });
   }
 };
 

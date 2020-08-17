@@ -5,7 +5,9 @@ import { Middleware } from 'types/bot';
 import { IncomingMessage, User } from 'types/telegraf';
 
 const command: Middleware = async (ctx) => {
-  const { username, saldos, defaultGroup } = await api.getUser(ctx.state.username);
+  const { username, saldos, defaultGroup } = await api.getUser(
+    ctx.state.username,
+  );
 
   if (_.size(saldos) === 1) {
     // User already has a default group
@@ -36,7 +38,9 @@ const command: Middleware = async (ctx) => {
     .value();
 
   if (_.isEmpty(groups)) {
-    ctx.reply('You are not a member in any group yet. You can join groups with /join');
+    ctx.reply(
+      'You are not a member in any group yet. You can join groups with /join',
+    );
     return;
   }
 
@@ -44,14 +48,18 @@ const command: Middleware = async (ctx) => {
   const message = ctx.message as IncomingMessage;
 
   if (message.chat.type !== 'private') {
-    ctx.reply('Let\'s continue in the private chat.');
+    ctx.reply("Let's continue in the private chat.");
   }
 
-  ctx.telegram.sendMessage(id, 'Pick one of the following groups as a default one', {
-    reply_markup: {
-      inline_keyboard: _.chunk(groups, 2),
+  ctx.telegram.sendMessage(
+    id,
+    'Pick one of the following groups as a default one',
+    {
+      reply_markup: {
+        inline_keyboard: _.chunk(groups, 2),
+      },
     },
-  });
+  );
 };
 
 export default command;

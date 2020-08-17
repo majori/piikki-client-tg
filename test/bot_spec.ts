@@ -11,7 +11,7 @@ describe('Bot', () => {
     bot = await createTestableBot();
   });
 
-  it('will fetch it\'s name with getMe()', () => {
+  it("will fetch it's name with getMe()", () => {
     expect(bot.telegram.getMe.called).to.be.true; // tslint:disable-line
     expect(bot.options).to.have.property('username', botInfo.username);
   });

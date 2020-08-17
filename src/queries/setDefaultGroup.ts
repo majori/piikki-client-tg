@@ -14,10 +14,9 @@ const queryHandler: Middleware = async (ctx) => {
   await api.setDefaultGroup(username, group);
   logger.debug('Set default group', { username, group });
 
-  ctx.reply(
-    `I've succesfully set your default group to *${group}*.`,
-    { parse_mode: 'Markdown' },
-  );
+  ctx.reply(`I've succesfully set your default group to *${group}*.`, {
+    parse_mode: 'Markdown',
+  });
   ctx.deleteMessage((callbackQuery.message as IncomingMessage).message_id);
 
   return ctx.answerCbQuery();

@@ -15,15 +15,14 @@ const queryHandler: Middleware = async (ctx) => {
   if (saldo !== 0) {
     ctx.reply(
       `You can only part from groups where your saldo is 0, ` +
-      `your current saldo in *${group}* is *${saldo}*!`,
+        `your current saldo in *${group}* is *${saldo}*!`,
       { parse_mode: 'Markdown' },
     );
   } else {
     await api.partGroup(username, group);
-    ctx.reply(
-      `You have parted from the group *${group}*!`,
-      { parse_mode: 'Markdown' },
-    );
+    ctx.reply(`You have parted from the group *${group}*!`, {
+      parse_mode: 'Markdown',
+    });
     ctx.deleteMessage((callbackQuery.message as IncomingMessage).message_id);
   }
   return ctx.answerCbQuery();

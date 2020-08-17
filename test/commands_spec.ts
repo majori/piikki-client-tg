@@ -19,7 +19,7 @@ describe('Commands', () => {
   };
 
   describe('Saldo', () => {
-    it('replys error message if user isn\'t member in any group', async () => {
+    it("replys error message if user isn't member in any group", async () => {
       setUserStub({
         username: 'user',
         saldos: {},
@@ -29,7 +29,8 @@ describe('Commands', () => {
       const context = contextBuilder();
 
       await saldo(context as any);
-      expect(context.reply.lastCall.calledWith(messages.notAMemberInAnyGroup)).to.be.true;
+      expect(context.reply.lastCall.calledWith(messages.notAMemberInAnyGroup))
+        .to.be.true;
     });
   });
 });

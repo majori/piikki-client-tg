@@ -12,10 +12,9 @@ const command: Middleware = async (ctx) => {
 
   const user = await api.getUserById(id);
   if (user.authenticated) {
-    ctx.reply(
-      `You are already logged in as user *${user.username}*.`,
-      { parse_mode: 'Markdown' },
-    );
+    ctx.reply(`You are already logged in as user *${user.username}*.`, {
+      parse_mode: 'Markdown',
+    });
     return;
   }
 
@@ -25,10 +24,10 @@ const command: Middleware = async (ctx) => {
       await api.saveIdForUser(username, id);
       sessions[id] = username;
       ctx.reply(
-        'Wonderful, you\'ve successfully logged in! ' +
-        'Now you can use rest of the commands normally.\n\n' +
-        '*NOTE*: You should delete the previous message so your password ' +
-        'won\'t get into wrong hands.',
+        "Wonderful, you've successfully logged in! " +
+          'Now you can use rest of the commands normally.\n\n' +
+          '*NOTE*: You should delete the previous message so your password ' +
+          "won't get into wrong hands.",
         { parse_mode: 'Markdown' },
       );
     } else {
@@ -37,13 +36,10 @@ const command: Middleware = async (ctx) => {
   } else {
     let msg = 'Please use following format: /login `[username]` `[password]`.';
     if ((ctx.message as IncomingMessage).chat.type !== 'private') {
-      msg += ' I\'d prefer to do this in the private chat.';
+      msg += " I'd prefer to do this in the private chat.";
     }
 
-    ctx.reply(
-      msg,
-      { parse_mode: 'Markdown' },
-    );
+    ctx.reply(msg, { parse_mode: 'Markdown' });
   }
 };
 

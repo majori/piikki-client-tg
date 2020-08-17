@@ -15,7 +15,7 @@ async function start() {
     bot.startWebhook(`/bot${config.tg.token}`, null as any, config.tg.port);
     logger.info(`Webhook listening at ${webhook}`);
 
-  // Do polling in development
+    // Do polling in development
   } else {
     bot.telegram.deleteWebhook();
     bot.startPolling();

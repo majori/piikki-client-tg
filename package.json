@@ -13,7 +13,8 @@
     "dev": "nodemon --inspect -r dotenv/config -r ts-node/register src/index.ts",
     "mocha": "mocha test/**/*_spec.ts",
     "mocha:watch": "mocha -w --inspect test/**/*_spec.ts",
-    "lint": "tslint -p tsconfig.json",
+    "lint": "prettier --check ./src ./test",
+    "lint:fix": "prettier --write ./src ./test",
     "migrate": "knex --cwd build migrate:latest",
     "migrate:dev": "knex --cwd src migrate:latest",
     "test": "npm run lint && npm run build:test && npm run mocha"
@@ -53,7 +54,7 @@
     "dotenv": "^5.0.1",
     "mocha": "^8.1.1",
     "nodemon": "^2.0.4",
-    "sinon": "^4.5.0",
-    "tslint": "^5.20.1"
+    "prettier": "^2.0.5",
+    "sinon": "^4.5.0"
   }
 }

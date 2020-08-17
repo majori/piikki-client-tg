@@ -17,7 +17,7 @@ const command: Middleware = async (ctx) => {
     .value();
 
   if (_.isEmpty(groups)) {
-    ctx.reply('It seems that you aren\'t a member of any group!');
+    ctx.reply("It seems that you aren't a member of any group!");
     return;
   }
 

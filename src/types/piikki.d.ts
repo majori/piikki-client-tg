@@ -8,7 +8,7 @@ declare interface User {
   defaultGroup: string | null;
   saldos: {
     [group: string]: number;
-  }
+  };
 }
 
 declare interface UserAuth {

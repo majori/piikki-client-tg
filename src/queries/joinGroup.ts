@@ -16,30 +16,39 @@ const queryHandler: Middleware = async (ctx) => {
 
   try {
     await api.joinGroup(username, group);
-    ctx.reply(
-      `You are now member of the group *${group}*!`,
-      { parse_mode: 'Markdown',
-        reply_markup: isFirstGroup ? undefined : {
-          inline_keyboard: [
-            [{
-              text: 'Set this group as default',
-              callback_data: _.join([CallbackDataTypeEnum.setDefaultGroup, group], ';'),
-            }],
-            [{
-              text: 'Keep the current default group',
-              callback_data: _.join([CallbackDataTypeEnum.keepDefaultGroup, group], ';'),
-            }],
-          ],
-        },
-      },
-    );
+    ctx.reply(`You are now member of the group *${group}*!`, {
+      parse_mode: 'Markdown',
+      reply_markup: isFirstGroup
+        ? undefined
+        : {
+            inline_keyboard: [
+              [
+                {
+                  text: 'Set this group as default',
+                  callback_data: _.join(
+                    [CallbackDataTypeEnum.setDefaultGroup, group],
+                    ';',
+                  ),
+                },
+              ],
+              [
+                {
+                  text: 'Keep the current default group',
+                  callback_data: _.join(
+                    [CallbackDataTypeEnum.keepDefaultGroup, group],
+                    ';',
+                  ),
+                },
+              ],
+            ],
+          },
+    });
     ctx.deleteMessage((callbackQuery.message as IncomingMessage).message_id);
   } catch (err) {
     if (err.response.status === 400) {
-      ctx.reply(
-        `It seems that you are already a member in group *${group}*`,
-        { parse_mode: 'Markdown' },
-      );
+      ctx.reply(`It seems that you are already a member in group *${group}*`, {
+        parse_mode: 'Markdown',
+      });
     }
   }
 

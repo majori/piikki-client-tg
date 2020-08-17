@@ -6,7 +6,12 @@ import { IncomingMessage } from 'types/telegraf';
 export const sessions: { [id: string]: string } = {};
 
 const middleware: Middleware = async (ctx, next: any) => {
-  if (_.includes(['start', 'help', 'login', 'create'], _.get(ctx, 'state.command.command'))) {
+  if (
+    _.includes(
+      ['start', 'help', 'login', 'create'],
+      _.get(ctx, 'state.command.command'),
+    )
+  ) {
     return next();
   }
 
@@ -16,7 +21,7 @@ const middleware: Middleware = async (ctx, next: any) => {
     ctx.state.username = sessions[id];
     return next();
 
-  // User isn't authenticated yet
+    // User isn't authenticated yet
   } else {
     const res = await api.getUserById(id);
     if (res.authenticated) {
@@ -27,16 +32,15 @@ const middleware: Middleware = async (ctx, next: any) => {
 
       return next();
     } else {
-      const msg = 'Hey! It seems you are not logged in yet. ' +
-        `${((ctx.message as IncomingMessage).chat.type !== 'private') ?
-          'Send me in the private chat' :
-          'Try to login with'
+      const msg =
+        'Hey! It seems you are not logged in yet. ' +
+        `${
+          (ctx.message as IncomingMessage).chat.type !== 'private'
+            ? 'Send me in the private chat'
+            : 'Try to login with'
         } /login \`[username]\` \`[password]\` ` +
         'or create a new account with /create `[username]` `[password]`';
-      ctx.reply(
-        msg,
-        { parse_mode: 'Markdown' },
-      );
+      ctx.reply(msg, { parse_mode: 'Markdown' });
     }
   }
 };

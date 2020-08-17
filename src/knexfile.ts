@@ -1,7 +1,7 @@
-import type { Config } from "knex";
+import type { Config } from 'knex';
 
 const defaultDbConfig: Config = {
-  client: "pg",
+  client: 'pg',
   connection: process.env.PG_CONNECTION_STRING || {
     host: process.env.PG_HOST,
     port: process.env.PG_PORT ? parseInt(process.env.PG_PORT, 10) : 5432,
@@ -18,17 +18,17 @@ const defaultDbConfig: Config = {
 export const development = {
   ...defaultDbConfig,
   connection: process.env.PG_CONNECTION_STRING || {
-    host: "localhost",
+    host: 'localhost',
     port: 5001,
-    database: "postgres",
-    user: "postgres",
-    password: "password12!",
+    database: 'postgres',
+    user: 'postgres',
+    password: 'password12!',
   },
 };
 
 export const production = {
   ...defaultDbConfig,
   migrations: {
-    extension: "js",
+    extension: 'js',
   },
 };

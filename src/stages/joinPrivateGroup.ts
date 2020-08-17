@@ -15,10 +15,9 @@ scene.enter((ctx: Context) => {
   ctx.scene!.state.group = group;
   ctx.scene!.state.attemps = 1;
 
-  ctx.reply(
-    `Please send the password of the group *${group}*.`,
-    { parse_mode: 'Markdown' },
-  );
+  ctx.reply(`Please send the password of the group *${group}*.`, {
+    parse_mode: 'Markdown',
+  });
 
   return ctx.answerCbQuery();
 });
@@ -33,23 +32,33 @@ scene.on('message', async (ctx: Context) => {
 
   try {
     await api.joinPrivateGroup(username, password, group);
-    ctx.reply(
-      `You are now member of the group *${group}*!`,
-      { parse_mode: 'Markdown',
-        reply_markup: isFirstGroup ? undefined : {
-          inline_keyboard: [
-            [{
-              text: 'Set this group as default',
-              callback_data: _.join([CallbackDataTypeEnum.setDefaultGroup, group], ';'),
-            }],
-            [{
-              text: 'Keep the current default group',
-              callback_data: _.join([CallbackDataTypeEnum.keepDefaultGroup, group], ';'),
-            }],
-          ],
-        },
-      },
-    );
+    ctx.reply(`You are now member of the group *${group}*!`, {
+      parse_mode: 'Markdown',
+      reply_markup: isFirstGroup
+        ? undefined
+        : {
+            inline_keyboard: [
+              [
+                {
+                  text: 'Set this group as default',
+                  callback_data: _.join(
+                    [CallbackDataTypeEnum.setDefaultGroup, group],
+                    ';',
+                  ),
+                },
+              ],
+              [
+                {
+                  text: 'Keep the current default group',
+                  callback_data: _.join(
+                    [CallbackDataTypeEnum.keepDefaultGroup, group],
+                    ';',
+                  ),
+                },
+              ],
+            ],
+          },
+    });
   } catch (err) {
     ctx.scene!.state.attemps = attemps + 1;
 
@@ -61,7 +70,9 @@ scene.on('message', async (ctx: Context) => {
         return ctx.reply('Wrong again! Try once more.');
 
       default:
-        ctx.reply('Still not correct! Use /join if you really want to join this group.');
+        ctx.reply(
+          'Still not correct! Use /join if you really want to join this group.',
+        );
         break;
     }
   }

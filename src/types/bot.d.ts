@@ -34,7 +34,10 @@ export interface Context extends TelegrafContext<State> {
   scene?: SceneObject;
 }
 
-export type Middleware = (ctx: Context, next?: () => Promise<any>) => Promise<any>;
+export type Middleware = (
+  ctx: Context,
+  next?: () => Promise<any>,
+) => Promise<any>;
 
 export interface Scene {
   enter(ctx: any): any;
