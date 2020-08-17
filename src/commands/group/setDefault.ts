@@ -2,7 +2,7 @@ import _ from 'lodash';
 import * as api from '../../api';
 import { CallbackDataTypeEnum } from '../../constants/callbackEnum';
 import { Middleware } from 'types/bot';
-import { IncomingMessage, User } from 'types/telegraf';
+import type { IncomingMessage, User } from 'telegraf/typings/telegram-types';
 
 const command: Middleware = async (ctx) => {
   const { username, saldos, defaultGroup } = await api.getUser(

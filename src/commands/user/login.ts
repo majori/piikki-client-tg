@@ -2,7 +2,7 @@ import _ from 'lodash';
 import * as api from '../../api';
 import { sessions } from '../../middlewares/auth';
 import { Middleware } from '../../types/bot';
-import { User, IncomingMessage } from '../../types/telegraf';
+import type { User, IncomingMessage } from 'telegraf/typings/telegram-types';
 
 const command: Middleware = async (ctx) => {
   const username = _.toString(ctx.state.command.splitArgs[0]);

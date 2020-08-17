@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import * as api from '../api';
-import { Middleware } from 'types/bot';
-import { IncomingMessage } from 'types/telegraf';
+import type { Middleware } from 'types/bot';
 
 export const sessions: { [id: string]: string } = {};
 
@@ -35,7 +34,7 @@ const middleware: Middleware = async (ctx, next: any) => {
       const msg =
         'Hey! It seems you are not logged in yet. ' +
         `${
-          (ctx.message as IncomingMessage).chat.type !== 'private'
+          ctx.message!.chat.type !== 'private'
             ? 'Send me in the private chat'
             : 'Try to login with'
         } /login \`[username]\` \`[password]\` ` +

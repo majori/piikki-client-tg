@@ -1,5 +1,5 @@
-import { Middleware } from '../types/bot';
-import { IncomingMessage } from '../types/telegraf';
+import type { Middleware } from '../types/bot';
+import type { IncomingMessage } from 'telegraf/typings/telegram-types';
 
 const command: Middleware = async (ctx) => {
   let msg =

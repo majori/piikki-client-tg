@@ -7,7 +7,7 @@ export default {
     test: process.env.NODE_ENV === 'test',
   },
   tg: {
-    token: process.env.TELEGRAM_TOKEN,
+    token: process.env.TELEGRAM_TOKEN!,
     webhook: process.env.WEBHOOK_DOMAIN,
     port: parseInt(process.env.PORT as string, 10) || 5000,
   },

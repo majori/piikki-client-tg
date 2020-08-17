@@ -1,11 +1,12 @@
 import _ from 'lodash';
 import * as api from '../../api';
 import { CallbackDataTypeEnum } from '../../constants/callbackEnum';
-import { Middleware } from 'types/bot';
-import { IncomingMessage, User } from 'types/telegraf';
+import type { Middleware } from 'types/bot';
+import type { Group } from 'types/piikki';
+import type { IncomingMessage, User } from 'telegraf/typings/telegram-types';
 
 const command: Middleware = async (ctx) => {
-  const { username, saldos } = await api.getUser(ctx.state.username);
+  const { saldos } = await api.getUser(ctx.state.username);
 
   const available = _.map(await api.getGroups(), (group: Group) =>
     _.pick(group, ['name', 'private']),

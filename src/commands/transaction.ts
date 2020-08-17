@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import * as api from '../api';
 import Logger from '../logger';
-import { Context, Middleware } from '../types/bot';
-import { IncomingMessage } from '../types/telegraf';
+import type { Context, Middleware } from '../types/bot';
+import type { IncomingMessage } from 'telegraf/typings/telegram-types';
 
 const logger = new Logger(__filename);
 

@@ -23,6 +23,7 @@ interface SceneObject {
 
 export interface Context extends Telegraf.Context {
   scene?: SceneObject;
+  state: State;
 }
 
 export type Middleware = (

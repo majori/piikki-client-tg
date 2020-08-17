@@ -1,16 +1,17 @@
 import _ from 'lodash';
 import * as api from '../api';
 import { CallbackDataTypeEnum } from '../constants/callbackEnum';
-import { CallbackQuery, Context, SceneObject } from 'types/bot';
-import { IncomingMessage } from 'types/telegraf';
+import type { Context } from 'types/bot';
 import Scene from 'telegraf/scenes/base';
 import { Scene as TelegrafScene } from 'types/bot';
 
 const scene = new Scene('joinPrivateGroup') as TelegrafScene;
 
 scene.enter((ctx: Context) => {
-  const callbackQuery = ctx.callbackQuery as CallbackQuery;
-  const group = callbackQuery.params[0];
+  const callbackQuery = ctx.callbackQuery;
+
+  const query = _.split(callbackQuery!.data!, ';');
+  const group = _.tail(query)[0];
 
   ctx.scene!.state.group = group;
   ctx.scene!.state.attemps = 1;
@@ -24,10 +25,9 @@ scene.enter((ctx: Context) => {
 
 scene.on('message', async (ctx: Context) => {
   const { username, saldos } = await api.getUser(ctx.state.username);
-  const message = ctx.message as IncomingMessage;
 
   const { group, attemps } = ctx.scene!.state;
-  const password = message.text || '';
+  const password = ctx.message!.text || '';
   const isFirstGroup = _.isEmpty(saldos);
 
   try {

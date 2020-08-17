@@ -1,13 +1,14 @@
 import _ from 'lodash';
-import { Telegraf } from 'types/telegraf';
-import session from 'telegraf/session';
+import type { Telegraf } from 'telegraf';
+import type { Context } from '../types/bot';
+import Session from 'telegraf/session';
 import Stage from 'telegraf/stage';
 import joinPrivateGroup from './joinPrivateGroup';
 
-export default (bot: Telegraf) => {
+export default (bot: Telegraf<Context>) => {
   const stage = new Stage();
   stage.register(joinPrivateGroup);
 
-  bot.use(session());
+  bot.use(Session());
   bot.use(stage.middleware());
 };

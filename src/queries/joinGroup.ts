@@ -2,16 +2,14 @@ import _ from 'lodash';
 import * as api from '../api';
 import { CallbackDataTypeEnum } from '../constants/callbackEnum';
 import Logger from '../logger';
-import { Middleware, CallbackQuery } from 'types/bot';
-import { IncomingMessage } from 'types/telegraf';
+import type { Context } from 'types/bot';
 
 const logger = new Logger(__filename);
 
-const queryHandler: Middleware = async (ctx) => {
-  const callbackQuery = ctx.callbackQuery as CallbackQuery;
+const queryHandler = async (ctx: Context, group: string) => {
+  const callbackQuery = ctx.callbackQuery!;
 
   const { username, saldos } = await api.getUser(ctx.state.username);
-  const group = callbackQuery.params[0];
   const isFirstGroup = _.isEmpty(saldos);
 
   try {
@@ -43,7 +41,7 @@ const queryHandler: Middleware = async (ctx) => {
             ],
           },
     });
-    ctx.deleteMessage((callbackQuery.message as IncomingMessage).message_id);
+    ctx.deleteMessage(callbackQuery.message!.message_id);
   } catch (err) {
     if (err.response.status === 400) {
       ctx.reply(`It seems that you are already a member in group *${group}*`, {
