@@ -8,7 +8,7 @@ export default {
   },
   tg: {
     token: process.env.TELEGRAM_TOKEN!,
-    webhook: process.env.WEBHOOK_DOMAIN,
+    webhook: process.env.TELEGRAM_WEBHOOK,
     port: parseInt(process.env.PORT as string, 10) || 5000,
   },
   piikki: {

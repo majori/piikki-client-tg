@@ -52,13 +52,13 @@ spec:
           env:
             - name: LOG_LEVEL
               value: {{ .Values.logging.level }}
-            - name: TG_TOKEN
+            - name: TELEGRAM_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: {{ include "piikki-client-tg.fullname" . }}-telegram-token
                   key: token
             {{- if .Values.ingress.enabled }}
-            - name: TG_WEBHOOK
+            - name: TELEGRAM_WEBHOOK
               value: https://{{ .Values.ingress.host }}
             {{- end }}
             - name: PIIKKI_API_URL
