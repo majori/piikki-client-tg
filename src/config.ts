@@ -6,10 +6,12 @@ export default {
     dev: process.env.NODE_ENV === 'development',
     test: process.env.NODE_ENV === 'test',
   },
+  server: {
+    port: parseInt(process.env.PORT as string, 10) || 5000,
+  },
   tg: {
     token: process.env.TELEGRAM_TOKEN!,
     webhook: process.env.TELEGRAM_WEBHOOK,
-    port: parseInt(process.env.PORT as string, 10) || 5000,
   },
   piikki: {
     url: process.env.PIIKKI_API_URL,
