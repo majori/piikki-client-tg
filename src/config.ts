@@ -12,8 +12,8 @@ export default {
     port: parseInt(process.env.PORT as string, 10) || 5000,
   },
   piikki: {
-    domain: process.env.PIIKKI_DOMAIN,
-    token: process.env.PIIKKI_TOKEN,
+    url: process.env.PIIKKI_API_URL,
+    token: process.env.PIIKKI_API_TOKEN,
   },
   logging: {
     level: (process.env.LOG_LEVEL || 'info') as CLILoggingLevel,

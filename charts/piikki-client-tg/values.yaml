@@ -6,6 +6,10 @@ image:
 logging:
   level: info
 
+api:
+  url:
+  token:
+
 telegram:
   token:
 

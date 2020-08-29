@@ -61,6 +61,13 @@ spec:
             - name: TG_WEBHOOK
               value: https://{{ .Values.ingress.host }}
             {{- end }}
+            - name: PIIKKI_API_URL
+              value: {{ .Values.api.url }}
+            - name: PIIKKI_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "piikki-client-tg.fullname" . }}-api-token
+                  key: token
             - name: PG_HOST
               value: {{ .Values.postgres.host }}
             - name: PG_DATABASE
