@@ -4,9 +4,10 @@ import start from './start';
 import help from './help';
 import user from './user';
 import group from './group';
-import { Telegraf } from '../types/telegraf';
+import type { Telegraf } from 'telegraf';
+import type { Context } from '../types/bot';
 
-export default (bot: Telegraf) => {
+export default (bot: Telegraf<Context>) => {
   bot.telegram.getMe().then((info) => {
     bot.options.username = info.username;
   });

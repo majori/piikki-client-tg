@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import * as api from '../api';
 import Logger from '../logger';
 import { Middleware } from 'types/bot';
 

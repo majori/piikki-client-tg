@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import * as api from '../api';
 import Logger from '../logger';
-import { Context, Middleware } from '../types/bot';
-import { IncomingMessage } from '../types/telegraf';
+import type { Context, Middleware } from '../types/bot';
+import type { IncomingMessage } from 'telegraf/typings/telegram-types';
 
 const logger = new Logger(__filename);
 
@@ -16,8 +16,8 @@ const makeTransaction = async (ctx: Context, options: TransactionOptions) => {
 
   if (!user.defaultGroup) {
     ctx.reply(
-      'It seems that you haven\'t any of your groups set as default group. ' +
-      'You can do it with the /setdefault command.',
+      "It seems that you haven't any of your groups set as default group. " +
+        'You can do it with the /setdefault command.',
       { parse_mode: 'Markdown' },
     );
     return;
@@ -26,13 +26,13 @@ const makeTransaction = async (ctx: Context, options: TransactionOptions) => {
   const amount = options.amount(ctx);
 
   if (amount) {
-    if (Math.abs(amount) >= 1e+6) {
+    if (Math.abs(amount) >= 1e6) {
       ctx.reply('The amount has to be less than one million.');
       return;
     }
 
     if (amount === 0) {
-      ctx.reply('The amount can\'t be zero.');
+      ctx.reply("The amount can't be zero.");
       return;
     }
 
@@ -43,19 +43,26 @@ const makeTransaction = async (ctx: Context, options: TransactionOptions) => {
       options.comment,
     );
 
-    logger.debug('Transaction', { username: user.username, group: user.defaultGroup, amount });
+    logger.debug('Transaction', {
+      username: user.username,
+      group: user.defaultGroup,
+      amount,
+    });
     ctx.reply(
       `Your new saldo in group *${user.defaultGroup}* is *${res.saldo}*.`,
       {
         parse_mode: 'Markdown',
-        reply_markup: ((ctx.message as IncomingMessage).chat.type === 'private') ? {
-          keyboard: [[{ text: '-5'}, { text: '-2' }, { text: '-1'}]],
-          resize_keyboard: true,
-        } : undefined,
+        reply_markup:
+          (ctx.message as IncomingMessage).chat.type === 'private'
+            ? {
+                keyboard: [[{ text: '-5' }, { text: '-2' }, { text: '-1' }]],
+                resize_keyboard: true,
+              }
+            : undefined,
       },
     );
   } else {
-    ctx.reply('The amount wasn\'t a number.');
+    ctx.reply("The amount wasn't a number.");
   }
 };
 
@@ -85,8 +92,14 @@ const amountFromText = (ctx: Context) => {
 
 export const commands: { [key: string]: Middleware } = {
   add: (ctx) => makeTransaction(ctx, { amount: amountFromCommandParam(true) }),
-  subtract: (ctx) => makeTransaction(ctx, { amount: amountFromCommandParam(false) }),
-  effort: (ctx) => makeTransaction(ctx, { amount: amountFromCommandParam(true), comment: 'effort'}),
+  subtract: (ctx) =>
+    makeTransaction(ctx, { amount: amountFromCommandParam(false) }),
+  effort: (ctx) =>
+    makeTransaction(ctx, {
+      amount: amountFromCommandParam(true),
+      comment: 'effort',
+    }),
 };
 
-export const fromText: Middleware = (ctx) => makeTransaction(ctx, { amount: amountFromText });
+export const fromText: Middleware = (ctx) =>
+  makeTransaction(ctx, { amount: amountFromText });

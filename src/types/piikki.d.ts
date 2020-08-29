@@ -1,32 +1,32 @@
-declare interface ApiResponse<T> {
+export interface ApiResponse<T> {
   ok: boolean;
   result: T;
 }
 
-declare interface User {
+export interface User {
   username: string;
   defaultGroup: string | null;
   saldos: {
     [group: string]: number;
-  }
+  };
 }
 
-declare interface UserAuth {
+export interface UserAuth {
   authenticated: boolean;
 }
 
-declare interface AlternativeUserAuth {
+export interface AlternativeUserAuth {
   authenticated: boolean;
   username: string;
   groupName: string;
 }
 
-declare interface Transaction {
+export interface Transaction {
   username: string;
   saldo: number;
 }
 
-declare interface Group {
+export interface Group {
   name: string;
   private: boolean;
   password?: string;

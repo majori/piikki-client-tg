@@ -10,42 +10,40 @@ import joinPrivateGroup from './joinPrivateGroup';
 import partGroup from './partGroup';
 
 import Logger from '../logger';
-import { Telegraf } from 'types/telegraf';
-import { Context, CallbackQuery } from 'types/bot';
+import type { Telegraf } from 'telegraf';
+import { Context } from 'types/bot';
 
 const logger = new Logger(__filename);
 
-export default (bot: Telegraf) => {
+export default (bot: Telegraf<Context>) => {
   bot.on('callback_query', async (ctx: Context, next: () => Promise<any>) => {
     logger.debug('Callback Query', ctx.callbackQuery);
 
-    const callbackQuery = ctx.callbackQuery as CallbackQuery;
+    const callbackQuery = ctx.callbackQuery!;
 
     if (!callbackQuery.data) {
       ctx.answerCbQuery();
     }
 
-    const query = _.split(callbackQuery.data as string, ';');
+    const query = _.split(callbackQuery.data!, ';');
     const command = _.first(query);
-    const params = _.tail(query);
-
-    callbackQuery.params = params;
+    const group = _.tail(query)[0];
 
     switch (command) {
       case CallbackDataTypeEnum.setDefaultGroup:
-        return setDefaultGroup(ctx, next);
+        return setDefaultGroup(ctx, group);
 
       case CallbackDataTypeEnum.keepDefaultGroup:
-        return keepDefaultGroup(ctx, next);
+        return keepDefaultGroup(ctx, group);
 
       case CallbackDataTypeEnum.joinGroup:
-        return joinGroup(ctx, next);
+        return joinGroup(ctx, group);
 
       case CallbackDataTypeEnum.joinPrivateGroup:
-        return joinPrivateGroup(ctx, next);
+        return joinPrivateGroup(ctx);
 
       case CallbackDataTypeEnum.partGroup:
-        return partGroup(ctx, next);
+        return partGroup(ctx, group);
 
       default:
         return ctx.answerCbQuery();

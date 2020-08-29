@@ -6,14 +6,16 @@ export default {
     dev: process.env.NODE_ENV === 'development',
     test: process.env.NODE_ENV === 'test',
   },
-  tg: {
-    token: process.env.TELEGRAM_TOKEN,
-    webhook: process.env.WEBHOOK_DOMAIN,
+  server: {
     port: parseInt(process.env.PORT as string, 10) || 5000,
   },
+  tg: {
+    token: process.env.TELEGRAM_TOKEN!,
+    webhook: process.env.TELEGRAM_WEBHOOK,
+  },
   piikki: {
-    domain: process.env.PIIKKI_DOMAIN,
-    token: process.env.PIIKKI_TOKEN,
+    url: process.env.PIIKKI_API_URL,
+    token: process.env.PIIKKI_API_TOKEN,
   },
   logging: {
     level: (process.env.LOG_LEVEL || 'info') as CLILoggingLevel,
