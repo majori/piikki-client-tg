@@ -36,7 +36,7 @@
     "axios": "^0.18.1",
     "express": "^4.17.1",
     "knex": "^0.21.4",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "pg": "^7.18.2",
     "telegraf": "^3.38.0",
     "telegraf-command-parts": "^1.0.3",
