@@ -1,6 +1,6 @@
-import type { Config } from 'knex';
+import type { Knex } from 'knex';
 
-const defaultDbConfig: Config = {
+const defaultDbConfig: Knex.Config = {
   client: 'pg',
   connection: process.env.PG_CONNECTION_STRING || {
     host: process.env.PG_HOST,

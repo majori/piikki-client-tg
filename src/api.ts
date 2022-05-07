@@ -5,7 +5,7 @@ import type * as Piikki from './types/piikki';
 
 import config from './config';
 
-axios.defaults.headers.common.Authorization = config.piikki.token;
+axios.defaults.headers.common.Authorization = config.piikki.token!;
 axios.defaults.baseURL = `${config.piikki.url}/api/v1/global`;
 
 async function getResult<T>(req: AxiosPromise<Piikki.ApiResponse<T>>) {

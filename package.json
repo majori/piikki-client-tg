@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "description": "Telegram client for piikki",
   "main": "src/index.js",
-  "engines": {
-    "node": "8"
-  },
   "scripts": {
     "start": "node build/index.js",
     "build": "tsc --listEmittedFiles",
@@ -33,11 +30,11 @@
   },
   "homepage": "https://github.com/majori/piikki-client-tg#readme",
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.27.2",
     "express": "^4.17.1",
-    "knex": "^0.21.4",
+    "knex": "^2.0.0",
     "lodash": "^4.17.20",
-    "pg": "^7.18.2",
+    "pg": "^8.7.3",
     "telegraf": "^3.38.0",
     "telegraf-command-parts": "^1.0.3",
     "winston": "^2.4.5"
@@ -45,7 +42,6 @@
   "devDependencies": {
     "@types/chai": "^4.2.12",
     "@types/express": "^4.17.7",
-    "@types/knex": "^0.16.1",
     "@types/lodash": "^4.14.159",
     "@types/mocha": "^5.2.7",
     "@types/node": "^14.0.27",
@@ -57,6 +53,6 @@
     "prettier": "^2.0.5",
     "sinon": "^4.5.0",
     "ts-node": "^8.10.2",
-    "typescript": "^4.0.2"
+    "typescript": "^4.6.4"
   }
 }

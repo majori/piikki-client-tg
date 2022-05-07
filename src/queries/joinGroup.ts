@@ -43,7 +43,7 @@ const queryHandler = async (ctx: Context, group: string) => {
     });
     ctx.deleteMessage(callbackQuery.message!.message_id);
   } catch (err) {
-    if (err.response.status === 400) {
+    if ((err as any).response.status === 400) {
       ctx.reply(`It seems that you are already a member in group *${group}*`, {
         parse_mode: 'Markdown',
       });
