@@ -8,6 +8,7 @@ const defaultDbConfig: Knex.Config = {
     database: process.env.PG_DATABASE,
     user: process.env.PG_USER,
     password: process.env.PG_PASSWORD,
+    ssl: { rejectUnauthorized: false },
   },
   pool: {
     min: 2,
