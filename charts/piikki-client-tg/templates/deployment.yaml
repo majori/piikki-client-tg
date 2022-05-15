@@ -22,8 +22,8 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
         - name: migration
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          command: ["npm", "run", "migrate"]
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ["/nodejs/bin/node", "node_modules/.bin/knex", "--cwd", "build", "migrate:latest"]
           env:
             - name: PG_HOST
               value: {{ .Values.postgres.host }}
@@ -39,11 +39,15 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.postgres.passwordSecret.name }}
                   key: {{ .Values.postgres.passwordSecret.key }}
+            {{- if .Values.postgres.requireSsl }}
+            - name: PGSSLMODE
+              value: require
+            {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -82,6 +86,10 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.postgres.passwordSecret.name }}
                   key: {{ .Values.postgres.passwordSecret.key }}
+            {{- if .Values.postgres.requireSsl }}
+            - name: PGSSLMODE
+              value: require
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /health

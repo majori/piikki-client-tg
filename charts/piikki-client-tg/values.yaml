@@ -1,4 +1,5 @@
 image:
+  registry: ghcr.io
   repository: majori/piikki-client-tg
   tag: latest
   pullPolicy: IfNotPresent
@@ -31,6 +32,7 @@ fullnameOverride: ''
 
 ingress:
   enabled: false
+  # ingressClassName: ''
   annotations:
     {}
     # kubernetes.io/ingress.class: nginx
