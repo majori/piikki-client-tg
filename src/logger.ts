@@ -3,13 +3,15 @@ import * as _ from 'lodash';
 import winston from 'winston';
 import config from './config';
 
-export class Logger extends winston.Logger {
+export class Logger {
+  private logger: winston.Logger;
+
   constructor(filePath?: string) {
     const label = filePath
       ? path.basename(filePath)
       : require('../package.json').name;
 
-    super({
+    this.logger = winston.createLogger({
       level: config.logging.level,
       format: winston.format.combine(
         winston.format.label({ label }),
@@ -28,14 +30,30 @@ export class Logger extends winston.Logger {
 
     // Suppress console messages when testing
     if (config.env.test && process.env.LOG_LEVEL !== 'debug') {
-      this.clear();
+      this.logger.clear();
     }
 
     this.setLevelForTransports(config.logging.level);
   }
 
+  info(message: string, ...meta: any[]) {
+    return this.logger.info(message, ...meta);
+  }
+
+  debug(message: string, ...meta: any[]) {
+    return this.logger.debug(message, ...meta);
+  }
+
+  warn(message: string, ...meta: any[]) {
+    return this.logger.warn(message, ...meta);
+  }
+
+  error(message: string, ...meta: any[]) {
+    return this.logger.error(message, ...meta);
+  }
+
   private setLevelForTransports(level: string) {
-    _.forEach(this.transports, (transport) => {
+    _.forEach(this.logger.transports, (transport) => {
       transport.level = level;
     });
   }
