@@ -45,3 +45,5 @@ jspm_packages
 
 build/
 !build/.gitignore
+
+.DS_Store

@@ -16,16 +16,16 @@ import { Context } from 'types/bot';
 const logger = new Logger(__filename);
 
 export default (bot: Telegraf<Context>) => {
-  bot.on('callback_query', async (ctx: Context, next: () => Promise<any>) => {
+  bot.on('callback_query', async (ctx) => {
     logger.debug('Callback Query', ctx.callbackQuery);
 
     const callbackQuery = ctx.callbackQuery!;
 
-    if (!callbackQuery.data) {
-      ctx.answerCbQuery();
+    if (!('data' in callbackQuery) || !callbackQuery.data) {
+      return ctx.answerCbQuery();
     }
 
-    const query = _.split(callbackQuery.data!, ';');
+    const query = _.split(callbackQuery.data, ';');
     const command = _.first(query);
     const group = _.tail(query)[0];
 

@@ -2,7 +2,11 @@
   "name": "piikki-client-tg",
   "version": "0.1.0",
   "description": "Telegram client for piikki",
-  "main": "src/index.js",
+  "main": "build/index.js",
+  "engines": {
+    "node": "24.x",
+    "npm": ">=9"
+  },
   "scripts": {
     "start": "node build/index.js",
     "build": "tsc --listEmittedFiles",
@@ -30,29 +34,29 @@
   },
   "homepage": "https://github.com/majori/piikki-client-tg#readme",
   "dependencies": {
-    "axios": "^0.27.2",
-    "express": "^4.17.1",
-    "knex": "^2.0.0",
-    "lodash": "^4.17.20",
-    "pg": "^8.7.3",
-    "telegraf": "^3.38.0",
+    "axios": "^1.18.0",
+    "express": "^5.2.1",
+    "knex": "^3.2.10",
+    "lodash": "^4.17.21",
+    "pg": "^8.22.0",
+    "telegraf": "^4.16.3",
     "telegraf-command-parts": "^1.0.3",
-    "winston": "^2.4.5"
+    "winston": "^3.19.0"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.12",
-    "@types/express": "^4.17.7",
-    "@types/lodash": "^4.14.159",
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^14.0.27",
-    "@types/sinon": "^4.3.3",
-    "chai": "^4.2.0",
-    "dotenv": "^5.0.1",
-    "mocha": "^8.1.1",
-    "nodemon": "^2.0.4",
-    "prettier": "^2.0.5",
-    "sinon": "^4.5.0",
-    "ts-node": "^8.10.2",
-    "typescript": "^4.6.4"
+    "@types/chai": "^4.3.20",
+    "@types/express": "^5.0.5",
+    "@types/lodash": "^4.17.20",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.13.2",
+    "@types/sinon": "^17.0.4",
+    "chai": "^4.5.0",
+    "dotenv": "^17.2.3",
+    "mocha": "^11.7.4",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "sinon": "^21.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   }
 }

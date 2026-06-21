@@ -2,13 +2,16 @@ import _ from 'lodash';
 import * as api from '../../api';
 import { sessions } from '../../middlewares/auth';
 import { Middleware } from '../../types/bot';
-import type { User, IncomingMessage } from 'telegraf/typings/telegram-types';
 
 const command: Middleware = async (ctx) => {
   const username = _.toString(ctx.state.command.splitArgs[0]);
   const password = _.toString(ctx.state.command.splitArgs[1]);
 
-  const id = (ctx.from as User).id;
+  const id = ctx.from?.id;
+
+  if (!id) {
+    return;
+  }
 
   const user = await api.getUserById(id);
   if (user.authenticated) {
@@ -35,7 +38,7 @@ const command: Middleware = async (ctx) => {
     }
   } else {
     let msg = 'Please use following format: /login `[username]` `[password]`.';
-    if ((ctx.message as IncomingMessage).chat.type !== 'private') {
+    if (ctx.chat?.type !== 'private') {
       msg += " I'd prefer to do this in the private chat.";
     }
 

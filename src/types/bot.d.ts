@@ -1,4 +1,4 @@
-import * as Telegraf from 'telegraf';
+import type { Context as TelegrafContext, MiddlewareFn } from 'telegraf';
 
 export interface CommandParts {
   text: string;
@@ -9,27 +9,17 @@ export interface CommandParts {
 }
 
 export interface State {
-  username: string;
-  command: CommandParts;
+  username?: string;
+  command?: CommandParts;
 }
 
-interface SceneObject {
-  state: {
-    group: string;
-    attemps: number;
-  };
-  leave(): any;
+export interface Context extends TelegrafContext {
+  scene?: any;
+  session?: any;
+  state: any;
 }
 
-export interface Context extends Telegraf.Context {
-  scene?: SceneObject;
-  state: State;
-}
-
-export type Middleware = (
-  ctx: Context,
-  next?: () => Promise<any>,
-) => Promise<any>;
+export type Middleware = MiddlewareFn<Context>;
 
 export interface Scene {
   enter(ctx: any): any;

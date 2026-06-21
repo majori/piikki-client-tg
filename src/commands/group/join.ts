@@ -3,7 +3,6 @@ import * as api from '../../api';
 import { CallbackDataTypeEnum } from '../../constants/callbackEnum';
 import type { Middleware } from 'types/bot';
 import type { Group } from 'types/piikki';
-import type { IncomingMessage, User } from 'telegraf/typings/telegram-types';
 
 const command: Middleware = async (ctx) => {
   const { saldos } = await api.getUser(ctx.state.username);
@@ -36,10 +35,13 @@ const command: Middleware = async (ctx) => {
     return;
   }
 
-  const id = (ctx.from as User).id;
-  const message = ctx.message as IncomingMessage;
+  const id = ctx.from?.id;
 
-  if (message.chat.type !== 'private') {
+  if (!id) {
+    return;
+  }
+
+  if (ctx.chat?.type !== 'private') {
     ctx.reply("Let's continue in the private chat.");
   }
   ctx.telegram.sendMessage(id, 'Join one of the following groups', {

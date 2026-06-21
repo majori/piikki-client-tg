@@ -27,7 +27,7 @@ describe('Commands', () => {
 
       const context = contextBuilder();
 
-      await saldo(context as any);
+      await saldo(context as any, async () => undefined);
       expect(context.reply.lastCall.calledWith(messages.notAMemberInAnyGroup))
         .to.be.true;
     });

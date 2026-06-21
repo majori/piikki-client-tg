@@ -2,7 +2,6 @@ import _ from 'lodash';
 import * as api from '../../api';
 import { CallbackDataTypeEnum } from '../../constants/callbackEnum';
 import { Middleware } from 'types/bot';
-import type { User } from 'telegraf/typings/telegram-types';
 
 const command: Middleware = async (ctx) => {
   const { username, saldos } = await api.getUser(ctx.state.username);
@@ -21,7 +20,11 @@ const command: Middleware = async (ctx) => {
     return;
   }
 
-  const id = (ctx.from as User).id;
+  const id = ctx.from?.id;
+
+  if (!id) {
+    return;
+  }
 
   ctx.telegram.sendMessage(id, 'Choose the group you wish to part', {
     reply_markup: {

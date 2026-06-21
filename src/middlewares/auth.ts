@@ -14,7 +14,11 @@ const middleware: Middleware = async (ctx, next: any) => {
     return next();
   }
 
-  const id = _.get(ctx, 'from.id');
+  const id = ctx.from?.id;
+
+  if (!id) {
+    return next();
+  }
 
   if (sessions[id]) {
     ctx.state.username = sessions[id];
@@ -34,7 +38,7 @@ const middleware: Middleware = async (ctx, next: any) => {
       const msg =
         'Hey! It seems you are not logged in yet. ' +
         `${
-          ctx.message!.chat.type !== 'private'
+          ctx.chat?.type !== 'private'
             ? 'Send me in the private chat'
             : 'Try to login with'
         } /login \`[username]\` \`[password]\` ` +

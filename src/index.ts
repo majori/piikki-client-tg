@@ -1,6 +1,6 @@
 import config from './config';
 import createBot from './bot';
-import Telegraf from 'telegraf';
+import { Telegraf } from 'telegraf';
 import Logger from './logger';
 import express from 'express';
 import { knex } from './database';
@@ -24,8 +24,8 @@ async function start() {
 
     // Do polling in development
   } else {
-    bot.telegram.deleteWebhook();
-    bot.startPolling();
+    await bot.telegram.deleteWebhook();
+    await bot.launch();
     logger.info('Polling started for updates');
   }
 

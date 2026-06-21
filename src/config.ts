@@ -1,5 +1,3 @@
-import { CLILoggingLevel } from 'winston';
-
 export default {
   env: {
     prod: process.env.NODE_ENV === 'production',
@@ -18,6 +16,6 @@ export default {
     token: process.env.PIIKKI_API_TOKEN,
   },
   logging: {
-    level: (process.env.LOG_LEVEL || 'info') as CLILoggingLevel,
+    level: process.env.LOG_LEVEL || 'info',
   },
 };

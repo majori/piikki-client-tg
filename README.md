@@ -2,7 +2,7 @@
 Telegram client for [piikki](https://github.com/majori/piikki).
 
 # Development
-- Install [node.js](https://nodejs.org/en/) v8.* and [Docker](https://www.docker.com/community-edition)
+- Install [node.js](https://nodejs.org/en/) v24 and [Docker](https://www.docker.com/community-edition)
 - Run `npm install`
 - Create local database with `docker-compose up -d`
 - Copy contents of `.env-sample` to new file called `.env`

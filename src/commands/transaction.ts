@@ -2,7 +2,6 @@ import _ from 'lodash';
 import * as api from '../api';
 import Logger from '../logger';
 import type { Context, Middleware } from '../types/bot';
-import type { IncomingMessage } from 'telegraf/typings/telegram-types';
 
 const logger = new Logger(__filename);
 
@@ -53,7 +52,7 @@ const makeTransaction = async (ctx: Context, options: TransactionOptions) => {
       {
         parse_mode: 'Markdown',
         reply_markup:
-          (ctx.message as IncomingMessage).chat.type === 'private'
+          ctx.chat?.type === 'private'
             ? {
                 keyboard: [[{ text: '-5' }, { text: '-2' }, { text: '-1' }]],
                 resize_keyboard: true,
@@ -83,7 +82,8 @@ const amountFromCommandParam = (positive: boolean) => (ctx: Context) => {
 };
 
 const amountFromText = (ctx: Context) => {
-  const text = (ctx.message as IncomingMessage).text as string;
+  const text =
+    ctx.message && 'text' in ctx.message ? (ctx.message.text as string) : '';
   const sign = text.slice(0, 1);
   const amount = _.toNumber(text.slice(1));
 
