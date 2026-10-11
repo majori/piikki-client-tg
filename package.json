@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/majori/piikki-client-tg#readme",
   "dependencies": {
-    "axios": "^1.18.0",
+    "axios": "^1.20.0",
     "express": "^5.2.1",
     "knex": "^3.2.10",
     "lodash": "^4.17.21",
